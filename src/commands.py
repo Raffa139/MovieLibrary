@@ -58,7 +58,14 @@ def random_movie():
 
 
 def search_movie():
-    pass
+    movies = repo.get_movies()
+    search = input("Enter part of movie name: ")
+    results = [title for title in movies if search.lower() in title.lower()]
+
+    for title in results:
+        movie = movies[title]
+        rating = movie["rating"]
+        print(f"{title}, {rating}")
 
 
 def sorted_by_rating():
