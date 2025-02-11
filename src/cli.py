@@ -1,3 +1,16 @@
+def input_str(prompt, error_message):
+    while True:
+        try:
+            string = input(prompt)
+
+            if not string:
+                raise ValueError()
+
+            return string
+        except ValueError:
+            print(error_message)
+
+
 def input_int(prompt, error_message):
     while True:
         try:

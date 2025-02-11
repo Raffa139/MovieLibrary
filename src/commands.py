@@ -1,5 +1,6 @@
 import random
 import repository as repo
+from cli import input_str
 
 
 def exit():
@@ -58,7 +59,7 @@ def random_movie():
 
 def search_movie():
     movies = repo.get_movies()
-    search = input("Enter part of movie name: ")
+    search = input_str("Enter part of movie name: ", error_message="Please enter a valid part")
     found_titles = [title for title in movies if search.lower() in title.lower()]
 
     for title in found_titles:

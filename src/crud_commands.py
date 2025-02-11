@@ -1,5 +1,5 @@
 import repository as repo
-from cli import input_int, input_float
+from cli import input_str, input_int, input_float
 
 
 def list_movies():
@@ -12,7 +12,7 @@ def list_movies():
 
 
 def add_movie():
-    title = input("Enter new movie name: ")
+    title = input_str("Enter new movie name: ", error_message="Please enter a valid title")
 
     if repo.has_movie(title):
         print(f"Movie {title} already exist!")
@@ -25,7 +25,7 @@ def add_movie():
 
 
 def update_movie():
-    title = input("Enter movie name: ")
+    title = input_str("Enter movie name: ", error_message="Please enter a valid title")
 
     if not repo.has_movie(title):
         print(f"Movie {title} doesn't exist!")
@@ -37,7 +37,7 @@ def update_movie():
 
 
 def delete_movie():
-    title = input("Enter movie name: ")
+    title = input_str("Enter movie name: ", error_message="Please enter a valid title")
 
     if not repo.has_movie(title):
         print(f"Movie {title} doesn't exist!")
