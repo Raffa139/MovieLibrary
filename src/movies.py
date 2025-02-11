@@ -14,6 +14,7 @@ def main():
     menu.add_command("Stats", cmd.stats)
     menu.add_command("Random movie", cmd.random_movie)
     menu.add_command("Search movie", cmd.search_movie)
+    menu.add_command("Movies sorted by rating", cmd.sorted_by_rating)
 
     menu.run()
 

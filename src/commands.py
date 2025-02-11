@@ -52,24 +52,27 @@ def stats():
 
 def random_movie():
     movies = repo.get_movies()
-    title = random.choice(list(movies))
-    rating = movies[title]["rating"]
-    print(f"Your movie for tonight: {title}, it's rated {rating}")
+    title, movie = random.choice(list(movies.items()))
+    print(f"Your movie for tonight: {title}, it's rated {movie['rating']}")
 
 
 def search_movie():
     movies = repo.get_movies()
     search = input("Enter part of movie name: ")
-    results = [title for title in movies if search.lower() in title.lower()]
+    found_titles = [title for title in movies if search.lower() in title.lower()]
 
-    for title in results:
+    for title in found_titles:
         movie = movies[title]
-        rating = movie["rating"]
-        print(f"{title}, {rating}")
+        print(f"{title}, {movie['rating']}")
 
 
 def sorted_by_rating():
-    pass
+    movies = repo.get_movies()
+    sorted_movies = sorted(movies, key=lambda title: movies[title]["rating"], reverse=True)
+
+    for title in sorted_movies:
+        movie = movies[title]
+        print(f"{title} ({movie['year']}): {movie['rating']}")
 
 
 def sorted_by_year():
