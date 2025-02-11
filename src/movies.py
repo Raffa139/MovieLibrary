@@ -12,6 +12,7 @@ def main():
     menu.add_command("Update movie", crud_cmd.update_movie)
     menu.add_command("Delete movie", crud_cmd.delete_movie)
     menu.add_command("Stats", cmd.stats)
+    menu.add_command("Random movie", cmd.random_movie)
 
     menu.run()
 

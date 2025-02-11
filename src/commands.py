@@ -1,3 +1,4 @@
+import random
 import repository as repo
 
 
@@ -50,7 +51,10 @@ def stats():
 
 
 def random_movie():
-    pass
+    movies = repo.get_movies()
+    title = random.choice(list(movies))
+    rating = movies[title]["rating"]
+    print(f"Your movie for tonight: {title}, it's rated {rating}")
 
 
 def search_movie():
