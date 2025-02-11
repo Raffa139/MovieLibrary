@@ -7,6 +7,7 @@ import menu
 def main():
     repo.initialize()
 
+    menu.add_command("Exit", cmd.exit_program)
     menu.add_command("List movies", crud_cmd.list_movies)
     menu.add_command("Add movie", crud_cmd.add_movie)
     menu.add_command("Update movie", crud_cmd.update_movie)

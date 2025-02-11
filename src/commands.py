@@ -1,10 +1,12 @@
+import sys
 import random
 import repository as repo
 from cli import input_str
 
 
-def exit():
-    pass
+def exit_program():
+    print("Bye!")
+    sys.exit()
 
 
 def stats():
