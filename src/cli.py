@@ -37,9 +37,40 @@ def input_int(prompt, *, error_message):
             print(error_message)
 
 
+def input_optional_int(prompt, *, error_message):
+    while True:
+        try:
+            user_input = input(prompt)
+
+            if not user_input:
+                return None
+
+            number = int(user_input)
+
+            if number < 0:
+                raise ValueError()
+
+            return number
+        except ValueError:
+            print(error_message)
+
+
 def input_float(prompt, *, error_message):
     while True:
         try:
             return float(input(prompt))
+        except ValueError:
+            print(error_message)
+
+
+def input_optional_float(prompt, *, error_message):
+    while True:
+        try:
+            user_input = input(prompt)
+
+            if not user_input:
+                return None
+
+            return float(user_input)
         except ValueError:
             print(error_message)

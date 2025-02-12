@@ -1,7 +1,7 @@
 import sys
 import random
 import repository as repo
-from cli import input_str, input_yes_no
+from cli import input_str, input_yes_no, input_optional_int, input_optional_float
 
 
 def exit_program():
@@ -91,4 +91,34 @@ def sorted_by_year():
 
 
 def filter_movies():
-    pass
+    movies = repo.get_movies()
+
+    min_rating = input_optional_float("Enter minimum rating (leave blank for no minimum rating): ",
+                                      error_message="Please enter a valid rating")
+
+    start_year = input_optional_int("Enter start year (leave blank for no start year): ",
+                                    error_message="Please enter a valid start year")
+
+    end_year = input_optional_int("Enter end year (leave blank for no end year): ",
+                                  error_message="Please enter a valid end year")
+
+    filtered_movies = []
+
+    for title, movie in movies.items():
+        rating = movie["rating"]
+        year = movie["year"]
+
+        has_min_rating = not min_rating or rating >= min_rating
+        start_year_complies = not start_year or year >= start_year
+        end_year_complies = not end_year or year <= end_year
+        is_year_in_range = start_year_complies and end_year_complies
+
+        if has_min_rating and is_year_in_range:
+            filtered_movies.append(title)
+
+    print()
+
+    # TODO: make function to print movies
+    for title in filtered_movies:
+        movie = movies[title]
+        print(f"{title} ({movie['year']}): {movie['rating']}")

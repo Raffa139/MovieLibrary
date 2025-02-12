@@ -17,6 +17,7 @@ def main():
     menu.add_command("Search movie", cmd.search_movie)
     menu.add_command("Movies sorted by rating", cmd.sorted_by_rating)
     menu.add_command("Movies sorted by year", cmd.sorted_by_year)
+    menu.add_command("Filter movies", cmd.filter_movies)
 
     menu.run()
 
