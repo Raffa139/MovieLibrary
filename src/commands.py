@@ -18,23 +18,30 @@ def stats():
         return
 
     ratings = []
-    best = None  # TODO: make list
-    worst = None  # TODO: make list
-    best_rating = None  # TODO: make list
-    worst_rating = None  # TODO: make list
+    best = []
+    worst = []
+    best_rating = None
+    worst_rating = None
 
     for title, movie in movies.items():
         rating = movie["rating"]
 
         if best_rating is None or rating > best_rating:
             best_rating = rating
-            best = title
 
         if worst_rating is None or rating < worst_rating:
             worst_rating = rating
-            worst = title
 
         ratings.append(rating)
+
+    for title, movie in movies.items():
+        rating = movie["rating"]
+
+        if rating == best_rating:
+            best.append(title)
+
+        if rating == worst_rating:
+            worst.append(title)
 
     avg = sum(ratings) / number_movies
     sorted_ratings = sorted(ratings)
@@ -49,8 +56,8 @@ def stats():
 
     print(f"Average rating: {round(avg, 1)}")
     print(f"Median rating: {round(median, 1)}")
-    print(f"Best movie: {best}, {best_rating}")
-    print(f"Worst movie: {worst}, {worst_rating}")
+    print(f"Best movie(s): {', '.join(best)}, {best_rating}")
+    print(f"Worst movie(s): {', '.join(worst)}, {worst_rating}")
 
 
 def random_movie():
