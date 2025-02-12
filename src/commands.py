@@ -1,7 +1,7 @@
 import sys
 import random
 import repository as repo
-from cli import input_str
+from cli import input_str, input_yes_no
 
 
 def exit_program():
@@ -18,10 +18,10 @@ def stats():
         return
 
     ratings = []
-    best = None  # make list
-    worst = None  # make list
-    best_rating = None  # make list
-    worst_rating = None  # make list
+    best = None  # TODO: make list
+    worst = None  # TODO: make list
+    best_rating = None  # TODO: make list
+    worst_rating = None  # TODO: make list
 
     for title, movie in movies.items():
         rating = movie["rating"]
@@ -79,7 +79,15 @@ def sorted_by_rating():
 
 
 def sorted_by_year():
-    pass
+    movies = repo.get_movies()
+    latest_first = input_yes_no("Do you want the latest movies first?")
+    sorted_movies = sorted(movies, key=lambda title: movies[title]["year"], reverse=latest_first)
+    print()
+
+    # TODO: make function to print movies
+    for title in sorted_movies:
+        movie = movies[title]
+        print(f"{title} ({movie['year']}): {movie['rating']}")
 
 
 def filter_movies():

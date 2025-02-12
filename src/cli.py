@@ -1,17 +1,30 @@
-def input_str(prompt, error_message):
+def input_str(prompt, *, error_message):
     while True:
         try:
-            string = input(prompt)
+            user_input = input(prompt)
 
-            if not string:
+            if not user_input:
                 raise ValueError()
 
-            return string
+            return user_input
         except ValueError:
             print(error_message)
 
 
-def input_int(prompt, error_message):
+def input_yes_no(prompt):
+    while True:
+        try:
+            user_input = input(f"{prompt} (Y/N): ").lower()
+
+            if user_input == "y" or user_input == "n":
+                return user_input == "y"
+
+            raise ValueError()
+        except ValueError:
+            print("Please enter 'Y' or 'N'")
+
+
+def input_int(prompt, *, error_message):
     while True:
         try:
             number = int(input(prompt))
@@ -24,7 +37,7 @@ def input_int(prompt, error_message):
             print(error_message)
 
 
-def input_float(prompt, error_message):
+def input_float(prompt, *, error_message):
     while True:
         try:
             return float(input(prompt))
