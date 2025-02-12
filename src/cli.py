@@ -16,7 +16,7 @@ def input_yes_no(prompt):
         try:
             user_input = input(f"{prompt} (Y/N): ").lower()
 
-            if user_input == "y" or user_input == "n":
+            if user_input in ("y", "n"):
                 return user_input == "y"
 
             raise ValueError()

@@ -49,7 +49,8 @@ def has_movie(title):
 
 def add_movie(title, year, rating):
     """
-    Adds a movie to the movies database. Loads the information from the JSON file, add the movie, and saves it.
+    Adds a movie to the movies database. Loads the information from the JSON file, add the movie,
+    and saves it.
     """
 
     movies = deserialize_movies()
@@ -64,7 +65,8 @@ def add_movie(title, year, rating):
 
 def delete_movie(title):
     """
-    Deletes a movie from the movies database. Loads the information from the JSON file, deletes the movie, and saves it.
+    Deletes a movie from the movies database. Loads the information from the JSON file,
+    deletes the movie, and saves it.
     """
 
     movies = deserialize_movies()
@@ -76,7 +78,8 @@ def delete_movie(title):
 
 def update_movie(title, rating):
     """
-    Updates a movie from the movies database. Loads the information from the JSON file, updates the movie, and saves it.
+    Updates a movie from the movies database. Loads the information from the JSON file,
+    updates the movie, and saves it.
     """
 
     movies = deserialize_movies()

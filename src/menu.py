@@ -8,8 +8,8 @@ def print_title():
 def print_menu():
     print("\nMenu:")
 
-    for i in range(len(commands)):
-        print(f"{i}. {commands[i]['title']}")
+    for i, command in enumerate(commands):
+        print(f"{i}. {command['title']}")
 
 
 def add_command(title, action):
