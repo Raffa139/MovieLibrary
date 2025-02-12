@@ -1,14 +1,12 @@
 import repository as repo
+import views as view
 from cli import input_str, input_int, input_float
 
 
 def list_movies():
     movies = repo.get_movies()
-
     print(f"{len(movies)} movies in total:")
-
-    for title, movie in movies.items():
-        print(f"{title} ({movie['year']}): {movie['rating']}")
+    view.movie_list(all_movies=movies, titles=movies.keys())
 
 
 def add_movie():

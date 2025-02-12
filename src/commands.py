@@ -1,6 +1,7 @@
 import sys
 import random
 import repository as repo
+import views as view
 from cli import input_str, input_yes_no, input_optional_int, input_optional_float
 
 
@@ -45,7 +46,6 @@ def stats():
 
     avg = sum(ratings) / number_movies
     sorted_ratings = sorted(ratings)
-    median = 0
 
     if has_odd_number_movies:
         median = sorted_ratings[number_movies // 2]
@@ -56,33 +56,28 @@ def stats():
 
     print(f"Average rating: {round(avg, 1)}")
     print(f"Median rating: {round(median, 1)}")
-    print(f"Best movie(s): {', '.join(best)}, {best_rating}")
-    print(f"Worst movie(s): {', '.join(worst)}, {worst_rating}")
+    print(f"Best movie(s): {', '.join(best)}, {round(best_rating, 1)}")
+    print(f"Worst movie(s): {', '.join(worst)}, {round(worst_rating, 1)}")
 
 
 def random_movie():
     movies = repo.get_movies()
     title, movie = random.choice(list(movies.items()))
-    print(f"Your movie for tonight: {title}, it's rated {movie['rating']}")
+    print(f"Your movie for tonight: {title}, it's rated {round(movie['rating'], 1)}")
 
 
 def search_movie():
     movies = repo.get_movies()
     search = input_str("Enter part of movie name: ", error_message="Please enter a valid part")
     found_titles = [title for title in movies if search.lower() in title.lower()]
-
-    for title in found_titles:
-        movie = movies[title]
-        print(f"{title}, {movie['rating']}")
+    print()
+    view.movie_list(all_movies=movies, titles=found_titles)
 
 
 def sorted_by_rating():
     movies = repo.get_movies()
     sorted_movies = sorted(movies, key=lambda title: movies[title]["rating"], reverse=True)
-
-    for title in sorted_movies:
-        movie = movies[title]
-        print(f"{title} ({movie['year']}): {movie['rating']}")
+    view.movie_list(all_movies=movies, titles=sorted_movies)
 
 
 def sorted_by_year():
@@ -90,11 +85,7 @@ def sorted_by_year():
     latest_first = input_yes_no("Do you want the latest movies first?")
     sorted_movies = sorted(movies, key=lambda title: movies[title]["year"], reverse=latest_first)
     print()
-
-    # TODO: make function to print movies
-    for title in sorted_movies:
-        movie = movies[title]
-        print(f"{title} ({movie['year']}): {movie['rating']}")
+    view.movie_list(all_movies=movies, titles=sorted_movies)
 
 
 def filter_movies():
@@ -124,8 +115,4 @@ def filter_movies():
             filtered_movies.append(title)
 
     print()
-
-    # TODO: make function to print movies
-    for title in filtered_movies:
-        movie = movies[title]
-        print(f"{title} ({movie['year']}): {movie['rating']}")
+    view.movie_list(all_movies=movies, titles=filtered_movies)
