@@ -13,7 +13,6 @@ class IRepository(ABC):
         if not os.path.exists(self._repository_file):
             with open(self._repository_file, "x"): pass
 
-    @abstractmethod
     def get_movies(self):
         """
         Returns a dictionary of dictionaries that contains the movies information in the database.
@@ -22,9 +21,8 @@ class IRepository(ABC):
         Returns:
             dict: A dictionary of movie titles and their information.
         """
-        pass
+        return self._deserialize_movies()
 
-    @abstractmethod
     def get_movie_by_title(self, title):
         """
         Retrieves a movie's information by its title.
@@ -36,9 +34,13 @@ class IRepository(ABC):
             dict or None: The movie's information as a dictionary, or None if the movie is not
             found.
         """
-        pass
+        movies = self._deserialize_movies()
 
-    @abstractmethod
+        if title not in movies:
+            return None
+
+        return movies[title]
+
     def has_movie(self, title):
         """
         Checks if a movie with the given title exists in the database.
@@ -49,9 +51,8 @@ class IRepository(ABC):
         Returns:
             bool: True if the movie exists, False otherwise.
         """
-        pass
+        return self.get_movie_by_title(title) is not None
 
-    @abstractmethod
     def add_movie(self, title, year, rating):
         """
         Adds a movie to the movies database. Loads the information from the JSON file, adds the
@@ -63,9 +64,15 @@ class IRepository(ABC):
             year (int): The year the movie was released.
             rating (float): The rating of the movie.
         """
-        pass
+        movies = self._deserialize_movies()
 
-    @abstractmethod
+        movies[title] = {
+            "rating": rating,
+            "year": year
+        }
+
+        self._serialize_movies(movies)
+
     def delete_movie(self, title):
         """
         Deletes a movie from the movies database. Loads the information from the JSON file,
@@ -74,9 +81,12 @@ class IRepository(ABC):
         Args:
             title (str): The title of the movie to delete.
         """
-        pass
+        movies = self._deserialize_movies()
 
-    @abstractmethod
+        del movies[title]
+
+        self._serialize_movies(movies)
+
     def update_movie(self, title, rating):
         """
         Updates a movie's rating in the movies database. Loads the information from the JSON file,
@@ -86,7 +96,11 @@ class IRepository(ABC):
             title (str): The title of the movie to update.
             rating (float): The new rating of the movie.
         """
-        pass
+        movies = self._deserialize_movies()
+
+        movies[title]["rating"] = rating
+
+        self._serialize_movies(movies)
 
     @abstractmethod
     def _serialize_movies(self, movies):
