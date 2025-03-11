@@ -1,6 +1,6 @@
 import src.app.crud_commands as crud_cmd
 import src.app.commands as cmd
-import src.menu as menu
+from src.menu.menu import Menu
 
 
 class MovieApp:
@@ -10,6 +10,7 @@ class MovieApp:
     def start(self):
         self._repo.initialize()
 
+        menu = Menu("My Movies Database")
         menu.add_command("Exit", cmd.exit_program)
         menu.add_command("List movies", lambda: crud_cmd.list_movies(self._repo))
         menu.add_command("Add movie", lambda: crud_cmd.add_movie(self._repo))
