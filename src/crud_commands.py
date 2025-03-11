@@ -1,16 +1,15 @@
-import repository as repo
 import views as view
 from cli import input_str, input_int, input_float
 
 
-def list_movies():
+def list_movies(repo):
     """Lists all movies in the repository."""
     movies = repo.get_movies()
     print(f"{len(movies)} movies in total:")
     view.movie_list(all_movies=movies, titles=movies.keys())
 
 
-def add_movie():
+def add_movie(repo):
     """Adds a new movie to the repository."""
     title = input_str("Enter new movie name: ", error_message="Please enter a valid title")
 
@@ -24,7 +23,7 @@ def add_movie():
     print(f"Movie {title} successfully added")
 
 
-def update_movie():
+def update_movie(repo):
     """Updates the rating of an existing movie."""
     title = input_str("Enter movie name: ", error_message="Please enter a valid title")
 
@@ -37,7 +36,7 @@ def update_movie():
     print(f"Movie {title} successfully updated")
 
 
-def delete_movie():
+def delete_movie(repo):
     """Deletes a movie from the repository."""
     title = input_str("Enter movie name: ", error_message="Please enter a valid title")
 
