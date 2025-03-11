@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 
 
@@ -5,12 +6,12 @@ class IRepository(ABC):
     def __init__(self, repository_file):
         self._repository_file = repository_file
 
-    @abstractmethod
     def initialize(self):
         """
         Initializes the movie repository by creating the movies.json file if it doesn't exist.
         """
-        pass
+        if not os.path.exists(self._repository_file):
+            with open(self._repository_file, "x"): pass
 
     @abstractmethod
     def get_movies(self):
