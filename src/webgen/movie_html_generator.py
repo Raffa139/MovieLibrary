@@ -1,4 +1,7 @@
 from .html_generator import load_template_html, write_output_html, merge_html_template, html_node
+from src.definitions import HTML_TEMPLATE_PATH, HTML_DESTINATION_PATH
+
+PLACEHOLDER = "__TEMPLATE_MOVIE_GRID__"
 
 
 def generate_html(movies):
@@ -23,6 +26,6 @@ def generate_html(movies):
 
 def generate_website(movies):
     html_content = generate_html(movies)
-    template = load_template_html("../../resources/index_template.html")
-    merged_template = merge_html_template(template, html_content, "__TEMPLATE_MOVIE_GRID__")
-    write_output_html(merged_template, "../../resources/index.html")
+    template = load_template_html(HTML_TEMPLATE_PATH)
+    merged_template = merge_html_template(template, html_content, PLACEHOLDER)
+    write_output_html(merged_template, HTML_DESTINATION_PATH)

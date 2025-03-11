@@ -23,5 +23,6 @@ class MovieApp:
         menu.add_command("Movies sorted by rating", lambda: cmd.sorted_by_rating(self._repo))
         menu.add_command("Movies sorted by year", lambda: cmd.sorted_by_year(self._repo))
         menu.add_command("Filter movies", lambda: cmd.filter_movies(self._repo))
+        menu.add_command("Generate website", lambda: cmd.generate_website(self._repo))
 
         menu.run()

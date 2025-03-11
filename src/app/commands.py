@@ -1,6 +1,7 @@
 import sys
 import random
 import src.app.views as view
+import src.webgen.movie_html_generator as web_gen
 from src.app.cli import input_str, input_yes_no, input_optional_int, input_optional_float
 
 
@@ -122,3 +123,8 @@ def filter_movies(repo):
 
     print()
     view.movie_list(all_movies=movies, titles=filtered_movies)
+
+
+def generate_website(repo):
+    movies = repo.get_movies()
+    web_gen.generate_website(movies)
