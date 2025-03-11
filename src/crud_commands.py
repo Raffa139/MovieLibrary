@@ -4,12 +4,14 @@ from cli import input_str, input_int, input_float
 
 
 def list_movies():
+    """Lists all movies in the repository."""
     movies = repo.get_movies()
     print(f"{len(movies)} movies in total:")
     view.movie_list(all_movies=movies, titles=movies.keys())
 
 
 def add_movie():
+    """Adds a new movie to the repository."""
     title = input_str("Enter new movie name: ", error_message="Please enter a valid title")
 
     if repo.has_movie(title):
@@ -23,6 +25,7 @@ def add_movie():
 
 
 def update_movie():
+    """Updates the rating of an existing movie."""
     title = input_str("Enter movie name: ", error_message="Please enter a valid title")
 
     if not repo.has_movie(title):
@@ -35,6 +38,7 @@ def update_movie():
 
 
 def delete_movie():
+    """Deletes a movie from the repository."""
     title = input_str("Enter movie name: ", error_message="Please enter a valid title")
 
     if not repo.has_movie(title):

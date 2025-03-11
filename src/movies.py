@@ -5,6 +5,7 @@ import menu
 
 
 def main():
+    """Initializes the movie repository and runs the main menu."""
     repo.initialize()
 
     menu.add_command("Exit", cmd.exit_program)

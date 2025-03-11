@@ -6,11 +6,13 @@ from cli import input_str, input_yes_no, input_optional_int, input_optional_floa
 
 
 def exit_program():
+    """Exits the program."""
     print("Bye!")
     sys.exit()
 
 
 def stats():
+    """Calculates and displays movie statistics."""
     movies = repo.get_movies()
     number_movies = len(movies)
     has_odd_number_movies = number_movies % 2 == 1
@@ -61,12 +63,14 @@ def stats():
 
 
 def random_movie():
+    """Selects and displays a random movie."""
     movies = repo.get_movies()
     title, movie = random.choice(list(movies.items()))
     print(f"Your movie for tonight: {title}, it's rated {round(movie['rating'], 1)}")
 
 
 def search_movie():
+    """Searches for movies by name and displays the results."""
     movies = repo.get_movies()
     search = input_str("Enter part of movie name: ", error_message="Please enter a valid part")
     found_titles = [title for title in movies if search.lower() in title.lower()]
@@ -75,12 +79,14 @@ def search_movie():
 
 
 def sorted_by_rating():
+    """Displays movies sorted by rating."""
     movies = repo.get_movies()
     sorted_movies = sorted(movies, key=lambda title: movies[title]["rating"], reverse=True)
     view.movie_list(all_movies=movies, titles=sorted_movies)
 
 
 def sorted_by_year():
+    """Displays movies sorted by year, with options for latest or oldest first."""
     movies = repo.get_movies()
     latest_first = input_yes_no("Do you want the latest movies first?")
     sorted_movies = sorted(movies, key=lambda title: movies[title]["year"], reverse=latest_first)
@@ -89,6 +95,7 @@ def sorted_by_year():
 
 
 def filter_movies():
+    """Filters and displays movies based on rating and year criteria."""
     movies = repo.get_movies()
 
     min_rating = input_optional_float("Enter minimum rating (leave blank for no minimum rating): ",
