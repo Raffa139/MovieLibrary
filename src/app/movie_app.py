@@ -4,8 +4,9 @@ from src.menu.menu import Menu
 
 
 class MovieApp:
-    def __init__(self, repo):
+    def __init__(self, repo, omdb_client):
         self._repo = repo
+        self._omdb_client = omdb_client
 
     def start(self):
         self._repo.initialize()
@@ -13,7 +14,7 @@ class MovieApp:
         menu = Menu("My Movies Database")
         menu.add_command("Exit", cmd.exit_program)
         menu.add_command("List movies", lambda: crud_cmd.list_movies(self._repo))
-        menu.add_command("Add movie", lambda: crud_cmd.add_movie(self._repo))
+        menu.add_command("Add movie", lambda: crud_cmd.add_movie(self._repo, self._omdb_client))
         menu.add_command("Update movie", lambda: crud_cmd.update_movie(self._repo))
         menu.add_command("Delete movie", lambda: crud_cmd.delete_movie(self._repo))
         menu.add_command("Stats", lambda: cmd.stats(self._repo))

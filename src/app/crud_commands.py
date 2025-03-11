@@ -9,7 +9,7 @@ def list_movies(repo):
     view.movie_list(all_movies=movies, titles=movies.keys())
 
 
-def add_movie(repo):
+def add_movie(repo, omdb_client):
     """Adds a new movie to the repository."""
     title = input_str("Enter new movie name: ", error_message="Please enter a valid title")
 
@@ -17,10 +17,13 @@ def add_movie(repo):
         print(f"Movie {title} already exist!")
         return
 
-    year = input_int("Enter new movie year: ", error_message="Please enter a valid year")
-    rating = input_float("Enter new movie rating: ", error_message="Please enter a valid rating")
-    repo.add_movie(title, year, rating)
-    print(f"Movie {title} successfully added")
+    try:
+        print(f"Searching for movie {title}... ", end="")
+        full_title, year, rating, poster_url = omdb_client.find_movie(title)
+        repo.add_movie(full_title, year, rating, poster_url)
+        print(f"Movie {full_title} successfully added!")
+    except ValueError:
+        print(f"Movie with title {title} not found!")
 
 
 def update_movie(repo):
