@@ -1,7 +1,7 @@
 import sys
 import random
-import views as view
-from cli import input_str, input_yes_no, input_optional_int, input_optional_float
+import src.views as view
+from src.cli import input_str, input_yes_no, input_optional_int, input_optional_float
 
 
 def exit_program():

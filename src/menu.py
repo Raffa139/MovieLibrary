@@ -43,7 +43,6 @@ def get_command():
 
     while True:
         print_menu()
-
         command = input(f"\nEnter choice (0-{max_command_index}): ").strip()
 
         try:

@@ -1,5 +1,5 @@
-import views as view
-from cli import input_str, input_int, input_float
+import src.views as view
+from src.cli import input_str, input_int, input_float
 
 
 def list_movies(repo):
