@@ -1,6 +1,6 @@
-import src.app.crud_commands as crud_cmd
-import src.app.commands as cmd
-from src.menu.menu import Menu
+import app.crud_commands as crud_cmd
+import app.commands as cmd
+from menu.menu import Menu
 
 
 class MovieApp:

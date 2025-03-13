@@ -1,8 +1,8 @@
 import sys
 import random
-import src.app.views as view
-import src.webgen.movie_html_generator as web_gen
-from src.app.cli import input_str, input_yes_no, input_optional_int, input_optional_float
+import app.views as view
+import webgen.movie_html_generator as web_gen
+from app.cli import input_str, input_yes_no, input_optional_int, input_optional_float
 
 
 def exit_program():

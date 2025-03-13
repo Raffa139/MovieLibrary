@@ -1,6 +1,6 @@
 import csv
 
-from .irepository import IRepository
+from repository.irepository import IRepository
 
 
 class CsvRepository(IRepository):

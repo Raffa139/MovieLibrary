@@ -1,6 +1,6 @@
 import json
 
-from .irepository import IRepository
+from repository.irepository import IRepository
 
 
 class JsonRepository(IRepository):

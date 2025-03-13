@@ -1,5 +1,5 @@
-from .html_generator import load_template_html, write_output_html, merge_html_template, html_node
-from src.definitions import HTML_TEMPLATE_PATH, HTML_DESTINATION_PATH
+from webgen.html_generator import load_template_html, write_output_html, merge_html_template, html_node
+from definitions import HTML_TEMPLATE_PATH, HTML_DESTINATION_PATH
 
 PLACEHOLDER = "__TEMPLATE_MOVIE_GRID__"
 

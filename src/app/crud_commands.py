@@ -1,5 +1,5 @@
-import src.app.views as view
-from src.app.cli import input_str, input_int, input_float
+import app.views as view
+from app.cli import input_str, input_int, input_float
 
 
 def list_movies(repo):
