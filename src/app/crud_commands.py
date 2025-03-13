@@ -19,8 +19,8 @@ def add_movie(repo, omdb_client):
 
     try:
         print(f"Searching for movie {title}... ", end="")
-        full_title, year, rating, poster_url = omdb_client.find_movie(title)
-        repo.add_movie(full_title, year, rating, poster_url)
+        full_title, year, rating, poster_url, imdb_id = omdb_client.find_movie(title)
+        repo.add_movie(full_title, year, rating, poster_url, imdb_id)
         print(f"Movie {full_title} successfully added!")
     except ValueError:
         print(f"Movie with title {title} not found!")

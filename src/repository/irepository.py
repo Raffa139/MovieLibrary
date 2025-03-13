@@ -53,7 +53,7 @@ class IRepository(ABC):
         """
         return self.get_movie_by_title(title) is not None
 
-    def add_movie(self, title, year, rating, poster_url):
+    def add_movie(self, title, year, rating, poster_url, imdb_id):
         """
         Adds a movie to the movies database. Loads the information from the JSON file, adds the
         movie,
@@ -69,7 +69,8 @@ class IRepository(ABC):
         movies[title] = {
             "year": year,
             "rating": rating,
-            "poster_url": poster_url
+            "poster_url": poster_url,
+            "imdb_id": imdb_id
         }
 
         self._serialize_movies(movies)

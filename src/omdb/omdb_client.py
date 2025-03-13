@@ -23,4 +23,4 @@ class OmdbClient:
         if "Error" in json:
             raise ValueError(f"Movie with title '{title}' not found")
 
-        return json["Title"], int(json["Year"]), float(json["imdbRating"]), json["Poster"]
+        return json["Title"], int(json["Year"]), float(json["imdbRating"]), json["Poster"], json["imdbID"]
