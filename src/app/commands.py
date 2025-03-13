@@ -126,5 +126,6 @@ def filter_movies(repo):
 
 
 def generate_website(repo):
+    """Generates a website with the movies from the repository."""
     movies = repo.get_movies()
     web_gen.generate_website(movies)

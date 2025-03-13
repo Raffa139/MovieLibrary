@@ -7,6 +7,12 @@ from environment import get_api_key
 
 
 def instantiate_repository():
+    """
+    Instantiates the movie repository based on command-line arguments.
+
+    Returns:
+        JsonRepository or CsvRepository: The instantiated repository object.
+    """
     if len(sys.argv) < 2:
         return JsonRepository("movies.json")
 
@@ -23,7 +29,7 @@ def instantiate_repository():
 
 
 def main():
-    """Initializes the movie repository and runs the main menu."""
+    """Initializes the movie repository and runs the MovieApp application."""
     repo = instantiate_repository()
     omdb_client = OmdbClient(api_key=get_api_key())
     app = MovieApp(repo, omdb_client)

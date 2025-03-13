@@ -4,6 +4,10 @@ from repository.irepository import IRepository
 
 
 class CsvRepository(IRepository):
+    """
+    A repository for storing and retrieving movie data in CSV format.
+    """
+
     def __init__(self, repository_file):
         super().__init__(repository_file)
 

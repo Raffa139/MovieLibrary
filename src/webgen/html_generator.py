@@ -2,6 +2,9 @@ def load_template_html(template_file):
     """
     Loads the HTML template from the specified file.
 
+    Args:
+        template_file (str): The path to the HTML template file.
+
     Returns:
         str: The content of the HTML template file.
     """
@@ -15,6 +18,7 @@ def write_output_html(content, output_file):
 
     Args:
         content (str): The HTML content to write to the file.
+        output_file (str): The path to the output HTML file.
     """
     with open(output_file, mode="w", encoding="utf-8") as file:
         file.write(content)
@@ -29,6 +33,7 @@ def merge_html_template(template, content, placeholder):
     Args:
         template (str): The HTML template string.
         content (str): The generated HTML content to insert.
+        placeholder (str): The placeholder string to replace in the template.
 
     Returns:
         str: The merged HTML string.
@@ -44,8 +49,8 @@ def html_node(node, *, children=None, css_class=None, self_closing=False, **html
         node (str): The HTML tag name (e.g., "div", "p", "span").
         children (list[str] or str): A list of child HTML strings. Defaults to None.
         css_class (str): A CSS class to add to the opening tag. Defaults to None.
-        self_closing (bool): Whether the tag is self-closing (e.g., <br />).
-        Defaults to False.
+        self_closing (bool): Whether the tag is self-closing (e.g., <br />). Defaults to False.
+        **html_attrs (dict): Additional HTML attributes as keyword arguments.
 
     Returns:
         str: The generated HTML node string.

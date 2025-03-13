@@ -5,6 +5,15 @@ PLACEHOLDER = "__TEMPLATE_MOVIE_GRID__"
 
 
 def generate_html(movies):
+    """
+    Generates HTML content for a movie grid from a dictionary of movies.
+
+    Args:
+        movies (dict): A dictionary where keys are movie titles and values are movie details.
+
+    Returns:
+        str: The generated HTML content as a string.
+    """
     if not movies:
         return html_node("h2", children="No movies exist in database")
 
@@ -28,6 +37,12 @@ def generate_html(movies):
 
 
 def generate_website(movies):
+    """
+    Generates a complete HTML website from a dictionary of movies.
+
+    Args:
+        movies (dict): A dictionary where keys are movie titles and values are movie details.
+    """
     html_content = generate_html(movies)
     template = load_template_html(HTML_TEMPLATE_PATH)
     merged_template = merge_html_template(template, html_content, PLACEHOLDER)

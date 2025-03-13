@@ -10,7 +10,7 @@ def list_movies(repo):
 
 
 def add_movie(repo, omdb_client):
-    """Adds a new movie to the repository."""
+    """Adds a new movie to the repository using OMDB API."""
     title = input_str("Enter new movie name: ", error_message="Please enter a valid title")
 
     if repo.has_movie(title):

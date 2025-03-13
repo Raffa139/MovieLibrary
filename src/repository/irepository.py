@@ -3,12 +3,22 @@ from abc import ABC, abstractmethod
 
 
 class IRepository(ABC):
+    """
+    Abstract base class for movie repositories.
+    """
+
     def __init__(self, repository_file):
+        """
+        Initializes an IRepository object.
+
+        Args:
+            repository_file (str): The path to the repository file.
+        """
         self._repository_file = repository_file
 
     def initialize(self):
         """
-        Initializes the movie repository by creating the movies.json file if it doesn't exist.
+        Initializes the movie repository by creating the repository file if it doesn't exist.
         """
         if not os.path.exists(self._repository_file):
             with open(self._repository_file, "x"): pass
@@ -16,7 +26,6 @@ class IRepository(ABC):
     def get_movies(self):
         """
         Returns a dictionary of dictionaries that contains the movies information in the database.
-        The function loads the information from the JSON file and returns the data.
 
         Returns:
             dict: A dictionary of movie titles and their information.
@@ -55,14 +64,14 @@ class IRepository(ABC):
 
     def add_movie(self, title, year, rating, poster_url, imdb_id):
         """
-        Adds a movie to the movies database. Loads the information from the JSON file, adds the
-        movie,
-        and saves it.
+        Adds a movie to the movies database.
 
         Args:
             title (str): The title of the movie.
             year (int): The year the movie was released.
             rating (float): The rating of the movie.
+            poster_url (str): The URL of the movie poster.
+            imdb_id (str): The IMDb ID of the movie.
         """
         movies = self._deserialize_movies()
 
@@ -77,8 +86,7 @@ class IRepository(ABC):
 
     def delete_movie(self, title):
         """
-        Deletes a movie from the movies database. Loads the information from the JSON file,
-        deletes the movie, and saves it.
+        Deletes a movie from the movies database.
 
         Args:
             title (str): The title of the movie to delete.
@@ -91,8 +99,7 @@ class IRepository(ABC):
 
     def update_movie(self, title, rating):
         """
-        Updates a movie's rating in the movies database. Loads the information from the JSON file,
-        updates the movie, and saves it.
+        Updates a movie's rating in the movies database.
 
         Args:
             title (str): The title of the movie to update.
@@ -107,7 +114,7 @@ class IRepository(ABC):
     @abstractmethod
     def _serialize_movies(self, movies):
         """
-        Serializes the movies dictionary to the movies.json file.
+        Serializes the movies dictionary to the repository file.
 
         Args:
             movies (dict): The dictionary containing movie information.
@@ -117,7 +124,7 @@ class IRepository(ABC):
     @abstractmethod
     def _deserialize_movies(self):
         """
-        Deserializes the movies.json file into a dictionary.
+        Deserializes the repository file into a dictionary.
 
         Returns:
             dict: The dictionary containing movie information. Returns an empty dictionary if the
