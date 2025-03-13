@@ -12,7 +12,8 @@ class CsvRepository(IRepository):
             writer = csv.writer(file)
 
             for title, movie in movies.items():
-                writer.writerow([title, movie["year"], movie["rating"], movie["poster_url"]])
+                writer.writerow(
+                    [title, movie["year"], movie["rating"], movie["poster_url"], movie["imdb_id"]])
 
     def _deserialize_movies(self):
         with open(self._repository_file, encoding="utf-8") as file:
@@ -20,11 +21,12 @@ class CsvRepository(IRepository):
             movies = {}
 
             for row in reader:
-                title, year, rating, poster_url = row
+                title, year, rating, poster_url, imdb_id = row
                 movies[title] = {
                     "year": int(year),
                     "rating": float(rating),
-                    "poster_url": poster_url
+                    "poster_url": poster_url,
+                    "imdb_id": imdb_id
                 }
 
             return movies
