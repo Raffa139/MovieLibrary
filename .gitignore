@@ -1,5 +1,4 @@
 /.idea
 **/movies.json
 **/movies.csv
-**/index.html
 .env

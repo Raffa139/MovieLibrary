@@ -17,7 +17,7 @@ class OmdbClient:
         """
         self._api_key = api_key
 
-    def find_movie(self, title):
+    def find_movie_by_title(self, title):
         """
         Finds movie information by title using the OMDB API.
 

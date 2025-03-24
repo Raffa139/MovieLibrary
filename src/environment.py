@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 
-def get_api_key():
+def omdb_api_key():
     """
     Retrieves the API key from environment variables.
 
@@ -13,4 +13,4 @@ def get_api_key():
         str: The API key, or None if it is not set.
     """
     load_dotenv()
-    return os.getenv("API_KEY")
+    return os.getenv("OMDb_API_KEY")
