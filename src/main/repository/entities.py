@@ -20,7 +20,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
+    username = Column(String)
     # movies = relationship("Movie")
 
 
