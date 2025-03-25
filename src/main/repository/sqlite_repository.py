@@ -1,6 +1,6 @@
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 from .irepository import IRepository
-from .entities import Movie, Genre, CrewMember, User
+from .entities import Movie, Genre, CrewMember, User, MovieCrewMemberAssociation
 from . import db
 
 
@@ -20,30 +20,93 @@ class SQLiteRepository(IRepository):
     def has_movie(self, id):
         return self.find_movie_by_id(id) is not None
 
-    def add_movie(self, title, release_year, rating, poster_url, imdb_id):
-        movie = Movie(title=title,
-                      release_year=release_year,
-                      rating=rating,
-                      poster_url=poster_url,
-                      imdb_id=imdb_id)
+    def add_movie(self, title, release_year, rating, poster_url, imdb_id, genre_names, directors,
+                  writers, actors):
+        genres = []
+        for genre_name in genre_names:
+            genre = self.find_genre_by_name(genre_name)
 
-        db.session.add(movie)
-        db.session.commit()
+            if not genre:
+                new_genre = self.add_genre(genre_name)
+                genres.append(new_genre)
+            else:
+                genres.append(genre)
+
+        try:
+            movie = Movie(title=title,
+                          release_year=release_year,
+                          rating=rating,
+                          poster_url=poster_url,
+                          imdb_id=imdb_id,
+                          genres=genres)
+
+            db.session.add(movie)
+            db.session.flush()
+        except SQLAlchemyError:
+            db.session.rollback()
+
+        director_associations = [
+            self.__create_movie_crew_member_association(director, movie.id, member_type="director")
+            for director in directors]
+
+        writer_associations = [
+            self.__create_movie_crew_member_association(writer, movie.id, member_type="writer")
+            for writer in writers]
+
+        actor_associations = [
+            self.__create_movie_crew_member_association(actor, movie.id, member_type="actor")
+            for actor in actors]
+
+        try:
+            db.session.add_all(director_associations)
+            db.session.add_all(writer_associations)
+            db.session.add_all(actor_associations)
+            db.session.commit()
+            return Movie.query.filter(Movie.id == movie.id).one()
+        except SQLAlchemyError:
+            db.session.rollback()
 
     def add_genre(self, name):
         genre = Genre(name=name)
-        db.session.add(genre)
-        db.session.commit()
+
+        try:
+            db.session.add(genre)
+            db.session.commit()
+            return Genre.query.filter(Genre.id == genre.id).one()
+        except SQLAlchemyError:
+            db.session.rollback()
+
+    def find_genre_by_name(self, name):
+        try:
+            return Genre.query.filter(Genre.name == name).one()
+        except NoResultFound:
+            return None
 
     def add_crew_member(self, full_name):
         crew_member = CrewMember(full_name=full_name)
-        db.session.add(crew_member)
-        db.session.commit()
+
+        try:
+            db.session.add(crew_member)
+            db.session.commit()
+            return CrewMember.query.filter(CrewMember.id == crew_member.id).one()
+        except SQLAlchemyError:
+            db.session.rollback()
+
+    def find_crew_member_by_name(self, full_name):
+        try:
+            return CrewMember.query.filter(CrewMember.full_name == full_name).one()
+        except NoResultFound:
+            return None
 
     def add_user(self, username):
         user = User(username=username)
-        db.session.add(user)
-        db.session.commit()
+
+        try:
+            db.session.add(user)
+            db.session.commit()
+            return User.query.filter(User.id == user.id).one()
+        except SQLAlchemyError:
+            db.session.rollback()
 
     def find_all_users(self):
         return User.query.all()
@@ -62,6 +125,19 @@ class SQLiteRepository(IRepository):
 
     def update_user_movie(self, id, personal_rating):
         pass
+
+    def __create_movie_crew_member_association(self, crew_member_name, movie_id, member_type):
+        crew_member = self.find_crew_member_by_name(crew_member_name)
+
+        if crew_member:
+            crew_member_id = crew_member.id
+        else:
+            new_crew_member = self.add_crew_member(crew_member_name)
+            crew_member_id = new_crew_member.id
+
+        return MovieCrewMemberAssociation(movie_id=movie_id,
+                                          crew_member_id=crew_member_id,
+                                          member_type=member_type)
 
 
 sqlite_repo = SQLiteRepository()

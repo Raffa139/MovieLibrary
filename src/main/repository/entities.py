@@ -12,8 +12,8 @@ class Movie(db.Model):
     release_year = Column(Integer)
     rating = Column(Float)
     poster_url = Column(String)
-    # genres = relationship("Genre")
-    # crew_members = relationship("CrewMember")
+    genres = relationship("Genre", secondary="movie_genre")
+    crew_members = relationship("MovieCrewMemberAssociation")
 
 
 class User(db.Model):
@@ -45,6 +45,10 @@ class MovieUserAssociation(db.Model):
     user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
     personal_rating = Column(Float)
 
+    def __repr__(self):
+        return (f"<MovieUserAssociation movie_id={self.movie_id}, user_id={self.user_id}, "
+                f"personal_rating={self.personal_rating}>")
+
 
 class MovieCrewMemberAssociation(db.Model):
     __tablename__ = "movie_crew_member"
@@ -53,9 +57,16 @@ class MovieCrewMemberAssociation(db.Model):
     crew_member_id = Column(Integer, ForeignKey(CrewMember.id), primary_key=True)
     member_type = Column(String, primary_key=True)
 
+    def __repr__(self):
+        return (f"<MovieCrewMemberAssociation movie_id={self.movie_id}, crew_member_id="
+                f"{self.crew_member_id}, member_type={self.member_type}>")
+
 
 class MovieGenreAssociation(db.Model):
     __tablename__ = "movie_genre"
 
     movie_id = Column(Integer, ForeignKey(Movie.id), primary_key=True)
     genre_id = Column(Integer, ForeignKey(Genre.id), primary_key=True)
+
+    def __repr__(self):
+        return f"<MovieGenreAssociation movie_id={self.movie_id}, genre_id={self.genre_id}>"
