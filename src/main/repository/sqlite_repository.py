@@ -176,4 +176,4 @@ class SQLiteRepository(IRepository):
                                           member_type=member_type)
 
 
-sqlite_repo = SQLiteRepository()
+repo = SQLiteRepository()
