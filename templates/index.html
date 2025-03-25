@@ -1,31 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
-    <title>My Movie App</title>
-</head>
-<body>
+{% extends 'layout.html' %}
+
+{% block title %}
+My Movie App
+{% endblock %}
+
+{% block body %}
 <div class="list-movies-title">
-    <h1>My Movie App</h1>
+    <h1>Who is watching?</h1>
 </div>
 
 <div>
     <ol class="movie-grid">
-        {% for movie in movies %}
-            <li>
+        {% for user in users %}
+        <li>
+            <a href="{{ url_for('main.user_movies', user_id=user['id']) }}">
                 <div class="movie">
-                    <a href="https://www.imdb.com/title/{{ movie['imdb_id'] }}" target="_blank">
-                        <img class="movie-poster" src="{{ movie['poster_url'] }}" alt="{{ movie['title'] }}-Poster"/>
-                    </a>
-                    <div class="movie-title">{{ movie['title'] }}</div>
-                    <div class="movie-year">{{ movie['release_year'] }}</div>
+                    <div class="movie-title">{{ user['username'] }}</div>
                 </div>
-            </li>
+            </a>
+        </li>
         {% endfor %}
     </ol>
 </div>
-</body>
-</html>
+{% endblock %}
