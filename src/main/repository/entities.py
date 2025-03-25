@@ -21,7 +21,7 @@ class User(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String)
-    # movies = relationship("Movie")
+    movies = relationship("MovieUserAssociation")
 
 
 class Genre(db.Model):

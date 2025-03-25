@@ -1,6 +1,7 @@
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 from .irepository import IRepository
-from .entities import Movie, Genre, CrewMember, User, MovieCrewMemberAssociation
+from .entities import Movie, Genre, CrewMember, User, MovieCrewMemberAssociation, \
+    MovieUserAssociation
 from . import db
 
 
@@ -105,6 +106,14 @@ class SQLiteRepository(IRepository):
             db.session.add(user)
             db.session.commit()
             return User.query.filter(User.id == user.id).one()
+        except SQLAlchemyError:
+            db.session.rollback()
+
+    def add_user_movie(self, user_id, movie_id):
+        try:
+            user_movie = MovieUserAssociation(movie_id=movie_id, user_id=user_id)
+            db.session.add(user_movie)
+            db.session.commit()
         except SQLAlchemyError:
             db.session.rollback()
 
