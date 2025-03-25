@@ -126,14 +126,41 @@ class SQLiteRepository(IRepository):
         except NoResultFound:
             return None
 
-    def find_user_movies(self):
-        pass
+    def find_user_movies(self, user_id):
+        user = self.find_user_by_id(user_id)
+        return user.movies if user else []
 
-    def delete_user_movie(self, id):
-        pass
+    def find_user_movie(self, user_id, movie_id):
+        try:
+            return MovieUserAssociation.query.filter(
+                MovieUserAssociation.user_id == user_id, MovieUserAssociation.movie_id == movie_id
+            ).one()
+        except NoResultFound:
+            return None
 
-    def update_user_movie(self, id, personal_rating):
-        pass
+    def delete_user_movie(self, user_id, movie_id):
+        try:
+            user_movie = self.find_user_movie(user_id, movie_id)
+            db.session.delete(user_movie)
+            db.session.commit()
+            return True
+        except SQLAlchemyError:
+            db.session.rollback()
+            return False
+
+    def update_user_movie(self, user_id, movie_id, personal_rating):
+        try:
+            user_movie = self.find_user_movie(user_id, movie_id)
+
+            if not user_movie:
+                return False
+
+            user_movie.personal_rating = personal_rating
+            db.session.commit()
+            return True
+        except SQLAlchemyError:
+            db.session.rollback()
+            return False
 
     def __create_movie_crew_member_association(self, crew_member_name, movie_id, member_type):
         crew_member = self.find_crew_member_by_name(crew_member_name)
