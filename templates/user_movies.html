@@ -7,7 +7,7 @@ User Movies
 {% block body %}
 <div class="container">
     <div class="movie-grid">
-        {% for movie in user_movies * 10 %}
+        {% for movie in user_movies %}
         <div class="movie">
             <a href="https://www.imdb.com/title/{{ movie['imdb_id'] }}" target="_blank">
                 <img class="movie-poster"
@@ -28,12 +28,14 @@ User Movies
 
                 <div class="movie-buttons">
                     <form action="{{ url_for('main.update_user_movie', user_id=user['id'], movie_id=movie['id']) }}"
-                          method="UPDATE"
+                          method="GET"
                     >
                         <input type="submit" value="Update"/>
                     </form>
 
-                    <form action="{{ url_for('main.delete_user_movie', user_id=user['id'], movie_id=movie['id']) }}" method="DELETE">
+                    <form action="{{ url_for('main.delete_user_movie', user_id=user['id'], movie_id=movie['id']) }}"
+                          method="GET"
+                    >
                         <input type="submit" class="delete" value="Delete"/>
                     </form>
                 </div>

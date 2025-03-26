@@ -11,5 +11,13 @@
 {% block body %}
 <p>Fallback content.</p>
 {% endblock %}
+
+{% if message %}
+<div id="msg" class="message">
+    <p>{{ message }} (<span id="timer"></span>)</p>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
