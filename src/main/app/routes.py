@@ -17,7 +17,7 @@ def user_movies(user_id):
     if not user:
         return "Not Found", 404
 
-    return render_template("user_movies.html", username=user.username, user_movies=user.movies)
+    return render_template("user_movies.html", user=user, user_movies=user.movies)
 
 
 @bp.route("/users/<int:user_id>", methods=["POST"])
