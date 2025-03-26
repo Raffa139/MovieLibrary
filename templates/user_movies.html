@@ -12,7 +12,13 @@ User Movies
     </div>
 
     <div class="search">
-        <input type="text" placeholder="Add new Movie"/>
+        <input id="new-movie" type="text" onkeyup="handleKeyUp()" placeholder="Add new Movie"/>
+
+        <div id="search-results" class="hidden">
+            <div id="no-results" class="result-item">
+                No movies found
+            </div>
+        </div>
     </div>
 
     <div class="movie-grid">
@@ -69,4 +75,6 @@ User Movies
     </div>
 </div>
 {% endif %}
+
+<script src="{{ url_for('static', filename='add_movie.js') }}"></script>
 {% endblock %}

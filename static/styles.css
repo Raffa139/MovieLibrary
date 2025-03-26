@@ -198,6 +198,39 @@ h1, h2, h3 {
     margin-bottom: 10px;
 }
 
+#search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: fixed;
+    margin-top: 3px;
+    padding: 10px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-primary);
+}
+
+#search-results > .result-item {
+    color: var(--heading-primary);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+#search-results > .result-item:hover {
+    background: linear-gradient(to bottom right, var(--gradient-light-start), var(--gradient-light-end));
+    text-decoration: underline;
+}
+
+#search-results > #no-results {
+    cursor: default;
+}
+
+#search-results > #no-results:hover {
+    background: none;
+    text-decoration: none;
+}
+
 input[type="button"],
 input[type="submit"] {
   background: linear-gradient(to right, var(--gradient-light-start), var(--gradient-light-end));
@@ -272,5 +305,5 @@ input[type="text"]:focus {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }

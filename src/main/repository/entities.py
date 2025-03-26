@@ -15,6 +15,17 @@ class Movie(db.Model):
     genres = relationship("Genre", secondary="movie_genre")
     crew_members = relationship("MovieCrewMemberAssociation")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "imdb_id": self.imdb_id,
+            "title": self.title,
+            "release_year": self.release_year,
+            "rating": self.rating,
+            "poster_url": self.poster_url,
+            "genres": [genre.to_dict() for genre in self.genres]
+        }
+
 
 class User(db.Model):
     __tablename__ = "users"
@@ -24,6 +35,13 @@ class User(db.Model):
     movie_associations = relationship("MovieUserAssociation")
     movies = relationship("Movie", secondary="movie_user")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "movies": [movie.to_dict() for movie in self.movies]
+        }
+
 
 class Genre(db.Model):
     __tablename__ = "genres"
@@ -31,12 +49,24 @@ class Genre(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
+
 
 class CrewMember(db.Model):
     __tablename__ = "crew_members"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     full_name = Column(String)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "full_name": self.full_name,
+        }
 
 
 class MovieUserAssociation(db.Model):

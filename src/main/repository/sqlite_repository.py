@@ -15,8 +15,11 @@ class SQLiteRepository(IRepository):
         except NoResultFound:
             return None
 
-    def find_movie_by_title(self, title):
+    def find_movies_by_title(self, title):
         return Movie.query.filter(Movie.title == title).all()
+
+    def find_movies_like(self, title):
+        return Movie.query.filter(Movie.title.ilike(f"%{title}%")).all()
 
     def has_movie(self, id):
         return self.find_movie_by_id(id) is not None

@@ -7,7 +7,11 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def find_movie_by_title(self, title):
+    def find_movies_by_title(self, title):
+        pass
+
+    @abstractmethod
+    def find_movies_like(self, title):
         pass
 
     @abstractmethod
