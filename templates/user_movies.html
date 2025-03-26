@@ -5,7 +5,16 @@ User Movies
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="user-movies">
+    <div class="title">
+        <h1>Hello {{ user.username }}</h1>
+        <h2>Found {{ user_movies|length }} favourite Movies</h2>
+    </div>
+
+    <div class="search">
+        <input type="text" placeholder="Add new Movie"/>
+    </div>
+
     <div class="movie-grid">
         {% for movie in user_movies %}
         <div class="movie">

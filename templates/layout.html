@@ -8,9 +8,11 @@
     <title>{% block title %}Fallback Title{% endblock %}</title>
 </head>
 <body>
-{% block body %}
-<p>Fallback content.</p>
-{% endblock %}
+<div class="container">
+    {% block body %}
+    <p>Fallback content.</p>
+    {% endblock %}
+</div>
 
 {% if msg and msg_lvl %}
 <div id="msg" class="message {{ msg_lvl }}">
