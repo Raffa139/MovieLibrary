@@ -11,7 +11,7 @@ def get_movies():
     title = request.args.get("title")
 
     if title:
-        movies = repo.find_movies_like(title=title)
+        movies = repo.find_movies_like(title=title, limit=10)
         return __jsonify_entities(movies)
 
     movies = repo.find_all_movies()

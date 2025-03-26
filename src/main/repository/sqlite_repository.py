@@ -18,8 +18,13 @@ class SQLiteRepository(IRepository):
     def find_movies_by_title(self, title):
         return Movie.query.filter(Movie.title == title).all()
 
-    def find_movies_like(self, title):
-        return Movie.query.filter(Movie.title.ilike(f"%{title}%")).all()
+    def find_movies_like(self, title, limit=None):
+        query = Movie.query.filter(Movie.title.ilike(f"%{title}%"))
+
+        if limit:
+            return query.limit(limit).all()
+
+        return query.all()
 
     def has_movie(self, id):
         return self.find_movie_by_id(id) is not None
