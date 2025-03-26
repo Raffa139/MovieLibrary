@@ -12,9 +12,9 @@
 <p>Fallback content.</p>
 {% endblock %}
 
-{% if message %}
-<div id="msg" class="message">
-    <p>{{ message }} (<span id="timer"></span>)</p>
+{% if msg and msg_lvl %}
+<div id="msg" class="message {{ msg_lvl }}">
+    <p>{{ msg }} (<span id="timer"></span>)</p>
 </div>
 {% endif %}
 
