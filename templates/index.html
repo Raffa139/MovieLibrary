@@ -5,21 +5,31 @@ My Movie App
 {% endblock %}
 
 {% block body %}
-<div class="list-movies-title">
-    <h1>Who is watching?</h1>
-</div>
+<div class="user-container">
+    <div class="user-selection">
+        <h2>Who is watching?</h2>
 
-<div>
-    <ol class="movie-grid">
-        {% for user in users %}
-        <li>
+        <div class="user-list">
+            {% for user in users %}
             <a href="{{ url_for('main.user_movies', user_id=user['id']) }}">
-                <div class="movie">
-                    <div class="movie-title">{{ user['username'] }}</div>
+                <div class="user-item">
+                    <img src="{{ url_for('static', filename='placeholder_profile_picture.jpg') }}"
+                         alt="Profile-Picture-{{ user['username'] }}"
+                         class="user-picture"
+                    />
+                    <span class="text-ellipsis">{{ user['username'] }}</span>
                 </div>
             </a>
-        </li>
-        {% endfor %}
-    </ol>
+            {% endfor %}
+        </div>
+
+        <div style="padding-right: 5px">
+            <a href="{{ url_for('main.index') }}">
+                <div class="user-item new-user-item">
+                    <span>+</span>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 {% endblock %}

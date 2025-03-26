@@ -1,7 +1,78 @@
 body {
   background: #F5F5F0;
-  color: black;
-  font-family: Monaco;
+  margin: 0;
+  height: 100vh;
+  font-family: Calibri;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h1, h2, h3 {
+    margin: 0;
+}
+
+.user-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-selection {
+    border: 1px solid #ababab;
+    border-radius: 5px;
+    width: fit-content;
+    box-shadow: 3px 3px 10px 0px;
+    padding: 25px;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px 0;
+    padding-right: 5px;
+    max-height: 450px;
+    overflow: hidden auto;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    border: 1px solid #ababab;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 1.25em;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.new-user-item {
+    border-style: dashed;
+    padding: 5px 20px;
+    justify-content: center;
+    color: #ababab;
+    font-size: 1.5em;
+}
+
+.user-item:hover {
+    box-shadow: inset 0px 0px 2px 0;
+}
+
+.user-picture {
+    width: 50px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .list-movies-title {
