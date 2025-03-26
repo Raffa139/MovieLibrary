@@ -15,3 +15,8 @@ if (msg) {
         clearInterval(timerInterval);
     }, (elapsedTime + 0.5) * 1000);
 }
+
+const hideModal = () => {
+    const modal = document.querySelector("#modal");
+    modal.classList.add("hidden");
+};

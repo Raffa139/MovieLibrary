@@ -45,7 +45,7 @@ User Movies
                     <form action="{{ url_for('main.delete_user_movie', user_id=user['id'], movie_id=movie['id']) }}"
                           method="GET"
                     >
-                        <input type="submit" class="delete" value="Delete"/>
+                        <input type="submit" class="danger" value="Delete"/>
                     </form>
                 </div>
             </div>
@@ -53,4 +53,20 @@ User Movies
         {% endfor %}
     </div>
 </div>
+
+{% if movie_to_update %}
+<div id="modal" class="modal">
+    <div class="update-dialog">
+        <h2>Update Movie</h2>
+
+        <form action="{{ url_for('main.update_user_movie', user_id=user['id'], movie_id=movie_to_update) }}"
+              method="POST"
+        >
+            <input type="text" name="personal_rating" placeholder="Enter personal rating" required/>
+            <input type="submit" value="Update"/>
+            <input type="button" onclick="hideModal()" class="danger" value="Cancel"/>
+        </form>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
