@@ -8,9 +8,13 @@ User Movies
 
 {% block body %}
 <div class="user-movies">
-    <div class="title">
-        <h1>Hello {{ user.username }}</h1>
-        <h2>Found {{ user_movies|length }} favourite Movies</h2>
+    <div class="header">
+        <a href="{{ url_for('main.index') }}" style="align-self: flex-end">Logout</a>
+
+        <div class="title">
+            <h1>Hello {{ user.username }}</h1>
+            <h2>Found {{ user_movies|length }} favourite Movies</h2>
+        </div>
     </div>
 
     <div class="search">

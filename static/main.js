@@ -1,22 +1,18 @@
 const handleMessage = () => {
     const msg = document.querySelector("#msg");
+    const msgTimer = document.querySelector("#msg-timer");
 
-    if (msg) {
-        const timer = document.querySelector("#timer");
-        let elapsedTime = 5;
-        timer.innerHTML = elapsedTime;
+    if (msg && msgTimer) {
+        new ResizeObserver(changes => {
+            [change] = changes;
+            width = change.contentRect.width;
 
-        const timerInterval = setInterval(() => {
-            elapsedTime -= 1;
-            timer.innerHTML = elapsedTime;
-        }, 1000);
-
-        setTimeout(() => {
-            msg.classList.add("hidden");
-            clearInterval(timerInterval);
-        }, (elapsedTime + 0.5) * 1000);
+            if (width <= 0.25) {
+                msg.classList.add("hidden");
+            }
+        }).observe(msgTimer)
     }
-}
+};
 
 const hideModal = () => {
     const modal = document.querySelector("#modal");
