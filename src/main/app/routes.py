@@ -26,9 +26,18 @@ def user_movies(user_id):
     if not user:
         return "Not Found", 404
 
-    return render_template("user_movies.html", user=user, user_movies=user.movie_associations, msg=msg,
+    return render_template("user_movies.html", user=user, user_movies=user.movie_associations,
+                           msg=msg,
                            msg_lvl=msg_lvl, movie_to_update=movie_to_update,
                            current_rating=current_rating)
+
+
+@bp.route("/users/new", methods=["GET", "POST"])
+def add_user():
+    if request.method == "GET":
+        return render_template("add_user.html")
+
+    return redirect(url_for("main.index", msg="User created successfully!", msg_lvl="success"))
 
 
 @bp.route("/users/<int:user_id>", methods=["POST"])

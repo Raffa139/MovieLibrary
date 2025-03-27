@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Add User
+{% endblock %}
+
+{% block body %}
+<div class="new-user-form">
+    <h2>Create New User</h2>
+
+    <form action="{{ url_for('main.add_user') }}" method="POST" enctype="multipart/form-data">
+        <div class="input-group">
+            <img id="profile-picture-upload-handle"
+                 src="{{ url_for('static', filename='placeholder_profile_picture.jpg') }}"
+                 alt="Profile-Picture"
+                 class="user-picture"
+            />
+
+            <input id="profile-picture-input" type="file" accept="image/*" name="profile_picture">
+
+            <input type="text" name="username" placeholder="Enter username" autocomplete="off"
+                   required>
+        </div>
+
+        <div class="form-buttons">
+            <input type="submit" value="Create User">
+            <a href="{{ url_for('main.index') }}">
+                <input type="button" class="danger" value="Cancel"/>
+            </a>
+        </div>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='users.js') }}"></script>
+{% endblock %}
