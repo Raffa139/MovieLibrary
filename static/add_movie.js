@@ -36,8 +36,8 @@ const hideResults = () => {
     resultsContainer.classList.add("hidden");
 };
 
-const handleResultClick = (title) => {
-    console.log("CLICKED", title);
+const handleResultClick = (movie) => {
+    console.log("CLICKED", movie);
 };
 
 const createResults = ({ total_results, results }) => {
@@ -53,16 +53,16 @@ const createResults = ({ total_results, results }) => {
         noResults.classList.add("hidden");
     }
 
-    results.forEach(result => {
+    results.forEach(movie => {
         const div = document.createElement("div");
         div.classList.add("result-item");
-        div.innerHTML = `${result.title}`;
-        div.onclick = () => handleResultClick(result.title);
+        div.innerHTML = `${movie.title}`;
+        div.onclick = () => handleResultClick(movie);
         resultsContainer.appendChild(div);
     });
 };
 
-const addMovie = async () => {
+const searchMovies = async () => {
     const inputTitle = document.querySelector("#new-movie").value;
 
     if (!inputTitle) {
@@ -93,4 +93,4 @@ const debounce = (callback, delay) => {
     return debounced;
 };
 
-const handleKeyUp = debounce(addMovie, 300);
+const handleKeyUp = debounce(searchMovies, 300);
