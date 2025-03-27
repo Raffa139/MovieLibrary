@@ -208,6 +208,8 @@ h1, h2, h3 {
     border: 1px solid var(--border-light);
     border-radius: var(--border-radius);
     background-color: var(--bg-primary);
+    max-height: 450px;
+    overflow: auto;
 }
 
 #search-results > .result-item {

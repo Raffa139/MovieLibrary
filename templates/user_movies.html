@@ -12,7 +12,8 @@ User Movies
     </div>
 
     <div class="search">
-        <input id="new-movie" type="text" onkeyup="handleKeyUp()" placeholder="Add new Movie"/>
+        <input id="new-movie" type="text" onkeyup="handleKeyUp()" placeholder="Add new Movie"
+               autocomplete="off"/>
 
         <div id="search-results" class="hidden">
             <div id="no-results" class="result-item">
@@ -25,8 +26,10 @@ User Movies
         {% for movie in user_movies %}
         <div class="movie">
             <a href="https://www.imdb.com/title/{{ movie['imdb_id'] }}" target="_blank">
+                {% set poster_src = url_for('static', filename='placeholder_poster.jpg') if
+                movie['poster_url'] == 'N/A' else movie['poster_url'] %}
                 <img class="movie-poster"
-                     src="{{ movie['poster_url'] }}"
+                     src="{{ poster_src }}"
                      alt="{{ movie['title'] }}-Poster"
                 />
             </a>
@@ -68,7 +71,8 @@ User Movies
         <form action="{{ url_for('main.update_user_movie', user_id=user['id'], movie_id=movie_to_update) }}"
               method="POST"
         >
-            <input type="text" name="personal_rating" value="{{ current_rating if current_rating }}" placeholder="Enter personal rating" required/>
+            <input type="text" name="personal_rating" value="{{ current_rating if current_rating }}"
+                   placeholder="Enter personal rating" required/>
             <input type="submit" value="Update"/>
             <input type="button" onclick="hideModal()" class="danger" value="Cancel"/>
         </form>

@@ -89,13 +89,19 @@ const searchMovies = async () => {
     }
 
     const apiRes = await searchMoviesByTitle(API_MOVIES, inputTitle);
+    const omdbRes = await searchMoviesByTitle(OMDB_MOVIES, inputTitle);
 
-    if (apiRes.total_results === 0) {
-        const omdbRes = await searchMoviesByTitle(OMDB_MOVIES, inputTitle);
-        createResults(omdbRes);
-    } else {
-        createResults(apiRes);
-    }
+    const combinedResults = [ ...apiRes.results, ...omdbRes.results ];
+    const filteredResults = removeDuplicates(combinedResults);
+    createResults({
+        results: filteredResults,
+        total_results: filteredResults.length
+    });
+};
+
+const removeDuplicates = (movies) => {
+    const titles = new Set();
+    return movies.filter(({ title }) => !titles.has(title) && titles.add(title));
 };
 
 const debounce = (callback, delay) => {
