@@ -68,7 +68,7 @@ User Movies
         <form action="{{ url_for('main.update_user_movie', user_id=user['id'], movie_id=movie_to_update) }}"
               method="POST"
         >
-            <input type="text" name="personal_rating" placeholder="Enter personal rating" required/>
+            <input type="text" name="personal_rating" value="{{ current_rating if current_rating }}" placeholder="Enter personal rating" required/>
             <input type="submit" value="Update"/>
             <input type="button" onclick="hideModal()" class="danger" value="Cancel"/>
         </form>

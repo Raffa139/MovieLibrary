@@ -17,13 +17,16 @@ def user_movies(user_id):
     msg = request.args.get("msg")
     msg_lvl = request.args.get("msg_lvl")
     movie_to_update = request.args.get("movie_to_update")
+    current_rating = request.args.get("current_rating")
+
     user = repo.find_user_by_id(user_id)
 
     if not user:
         return "Not Found", 404
 
     return render_template("user_movies.html", user=user, user_movies=user.movies, msg=msg,
-                           msg_lvl=msg_lvl, movie_to_update=movie_to_update)
+                           msg_lvl=msg_lvl, movie_to_update=movie_to_update,
+                           current_rating=current_rating)
 
 
 @bp.route("/users/<int:user_id>", methods=["POST"])
@@ -34,7 +37,14 @@ def add_user_movie(user_id):
 @bp.route("/users/<int:user_id>/update-movie/<int:movie_id>", methods=["GET", "POST"])
 def update_user_movie(user_id, movie_id):
     if request.method == "GET":
-        return redirect(url_for("main.user_movies", user_id=user_id, movie_to_update=movie_id))
+        user_movie = repo.find_user_movie(user_id, movie_id)
+
+        if not user_movie:
+            return "Not Found", 404
+
+        current_rating = user_movie.personal_rating
+        return redirect(url_for("main.user_movies", user_id=user_id, movie_to_update=movie_id,
+                                current_rating=current_rating))
 
     personal_rating = request.form.get("personal_rating")
     success = repo.update_user_movie(user_id, movie_id, personal_rating)
