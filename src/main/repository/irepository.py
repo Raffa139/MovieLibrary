@@ -7,6 +7,10 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
+    def find_movie_by_id(self, id):
+        pass
+
+    @abstractmethod
     def find_movies_by_title(self, title):
         pass
 
@@ -27,7 +31,23 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
+    def find_genre_by_name(self, name):
+        pass
+
+    @abstractmethod
     def add_crew_member(self, full_name):
+        pass
+
+    @abstractmethod
+    def find_crew_member_by_name(self, full_name):
+        pass
+
+    @abstractmethod
+    def add_user(self, username):
+        pass
+
+    @abstractmethod
+    def add_user_movie(self, user_id, movie_id):
         pass
 
     @abstractmethod
@@ -35,13 +55,25 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def find_user_movies(self):
+    def find_user_by_id(self, id):
         pass
 
     @abstractmethod
-    def delete_user_movie(self, id):
+    def has_user(self, id):
         pass
 
     @abstractmethod
-    def update_user_movie(self, id, personal_rating):
+    def find_user_movie(self, user_id, movie_id):
+        pass
+
+    @abstractmethod
+    def has_user_movie(self, user_id, movie_id):
+        pass
+
+    @abstractmethod
+    def delete_user_movie(self, user_id, movie_id):
+        pass
+
+    @abstractmethod
+    def update_user_movie(self, user_id, movie_id, personal_rating):
         pass

@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from repository.sqlite_repository import repo
+from omdb.omdb_client import OmdbClient
+from environment import omdb_api_key
 
 bp = Blueprint("main", __name__)
 
@@ -31,7 +33,42 @@ def user_movies(user_id):
 
 @bp.route("/users/<int:user_id>", methods=["POST"])
 def add_user_movie(user_id):
-    pass
+    json = request.json
+    movie_id = json.get("id")
+    movie_title = json.get("title")
+
+    if movie_title is None:
+        return "Bad Request", 400
+
+    if not repo.has_user(user_id):
+        return "Not Found", 404
+
+    if repo.has_user_movie(user_id, movie_id):
+        return redirect(
+            url_for("main.user_movies", user_id=user_id, msg="Movie already in favourites!",
+                    msg_lvl="error"))
+
+    if repo.has_movie(movie_id):
+        repo.add_user_movie(user_id, movie_id)
+    else:
+        omdb_client = OmdbClient(api_key=omdb_api_key())
+        movie = omdb_client.find_movie_by_title(movie_title)
+
+        new_movie = repo.add_movie(
+            movie.get("title"),
+            movie.get("release_year"),
+            movie.get("rating"),
+            movie.get("poster_url"),
+            movie.get("imdb_id"),
+            movie.get("genres"),
+            movie.get("directors"),
+            movie.get("writers"),
+            movie.get("actors")
+        )
+        repo.add_user_movie(user_id, new_movie.id)
+
+    return redirect(url_for("main.user_movies", user_id=user_id, msg="Movie added successfully!",
+                            msg_lvl="success"))
 
 
 @bp.route("/users/<int:user_id>/update-movie/<int:movie_id>", methods=["GET", "POST"])

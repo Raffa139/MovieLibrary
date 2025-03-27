@@ -134,9 +134,8 @@ class SQLiteRepository(IRepository):
         except NoResultFound:
             return None
 
-    def find_user_movies(self, user_id):
-        user = self.find_user_by_id(user_id)
-        return user.movies if user else []
+    def has_user(self, id):
+        return self.find_user_by_id(id) is not None
 
     def find_user_movie(self, user_id, movie_id):
         try:
@@ -145,6 +144,9 @@ class SQLiteRepository(IRepository):
             ).one()
         except NoResultFound:
             return None
+
+    def has_user_movie(self, user_id, movie_id):
+        return self.find_user_movie(user_id, movie_id) is not None
 
     def delete_user_movie(self, user_id, movie_id):
         try:

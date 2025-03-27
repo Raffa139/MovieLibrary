@@ -47,17 +47,17 @@ class OmdbClient:
         if "Error" in json:
             raise ValueError(f"Movie with title '{title}' not found")
 
-        return {
+        return self.__sanitize_dict({
             "title": json.get("Title"),
-            "release_year": int(json.get("Year")),
+            "release_year": self.__sanitize_year(json.get("Year")),
             "rating": float(json.get("imdbRating")),
             "poster_url": json.get("Poster"),
             "imdb_id": json.get("imdbID"),
-            "genres": json.get("Genre"),
-            "directors": json.get("Director"),
-            "writers": json.get("Writer"),
-            "actors": json.get("Actors"),
-        }
+            "genres": json.get("Genre").split(","),
+            "directors": json.get("Director").split(","),
+            "writers": json.get("Writer").split(","),
+            "actors": json.get("Actors").split(","),
+        })
 
     def search_movies(self, title):
         url = f"{OMDB_API}?apikey={self._api_key}&type=movie&s={title}"
@@ -80,10 +80,30 @@ class OmdbClient:
 
         return {
             "total_results": total_results,
-            "results": [{
+            "results": [self.__sanitize_dict({
                 "title": result.get("Title"),
-                "release_year": int(result.get("Year").replace("–", "")),
+                "release_year": self.__sanitize_year(result.get("Year")),
                 "poster_url": result.get("Poster"),
                 "imdb_id": result.get("imdbID")
-            } for result in results]
+            }) for result in results]
         }
+
+    def __sanitize_dict(self, dict):
+        sanitized_dict = {**dict}
+        for key, value in dict.items():
+            if isinstance(value, str):
+                sanitized_dict[key] = self.__sanitize_field(value)
+
+            if isinstance(value, (list, tuple)):
+                sanitized_dict[key] = self.__sanitize_fields(value)
+
+        return sanitized_dict
+
+    def __sanitize_field(self, value):
+        return value.strip()
+
+    def __sanitize_fields(self, values):
+        return [self.__sanitize_field(value) for value in values]
+
+    def __sanitize_year(self, year):
+        return int(self.__sanitize_field(year).replace("–", ""))

@@ -36,8 +36,26 @@ const hideResults = () => {
     resultsContainer.classList.add("hidden");
 };
 
-const handleResultClick = (movie) => {
-    console.log("CLICKED", movie);
+const handleResultClick = async (movie) => {
+    hideResults();
+
+    const pathname = new URL(window.location.href).pathname;
+    const res = await fetch(pathname, {
+        method: "POST",
+        body: JSON.stringify({
+            id: movie.id,
+            title: movie.title
+        }),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    });
+
+    if (res.ok) {
+        window.location.replace(res.url);
+    } else {
+        throw Error(`Unexpected error when adding movie ${movie.title}`);
+    }
 };
 
 const createResults = ({ total_results, results }) => {
