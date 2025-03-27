@@ -1,3 +1,5 @@
+{% from 'macros/list_crew_members.html' import list_crew_members %}
+
 {% extends 'layout.html' %}
 
 {% block title %}
@@ -39,9 +41,19 @@ User Movies
                 <span class="movie-year">{{ movie['release_year'] }}</span>
                 <span class="movie-rating">{{ movie['rating'] }}</span>
                 <span class="movie-genres">
-                    {% for genre in movie['genres'] %}
-                        {{ genre['name'] }}{% if loop.index < movie['genres']|length %},{% endif %}
-                    {% endfor %}
+                    {{ ', '.join(movie['genres'] | map(attribute='name')) }}
+                </span>
+                <span class="movie-directors">
+                    Directors:
+                    {{ list_crew_members(movie['crew_members'], type='director') }}
+                </span>
+                <span class="movie-writers">
+                    Writers:
+                    {{ list_crew_members(movie['crew_members'], type='writer') }}
+                </span>
+                <span class="movie-actors">
+                    Actors:
+                    {{ list_crew_members(movie['crew_members'], type='actor') }}
                 </span>
 
                 <div class="movie-buttons">

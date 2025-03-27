@@ -86,6 +86,7 @@ class MovieCrewMemberAssociation(db.Model):
 
     movie_id = Column(Integer, ForeignKey(Movie.id), primary_key=True)
     crew_member_id = Column(Integer, ForeignKey(CrewMember.id), primary_key=True)
+    crew_member = relationship("CrewMember", foreign_keys="MovieCrewMemberAssociation.crew_member_id")
     member_type = Column(String, primary_key=True)
 
     def __repr__(self):

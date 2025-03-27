@@ -1,0 +1,6 @@
+{# macros/list_crew_members.html #}
+{% macro list_crew_members(all_member_associations, type) %}
+    {% set associations = all_member_associations | selectattr('member_type', 'eq', type) | list %}
+    {% set members = associations | map(attribute='crew_member') | map(attribute='full_name') | list %}
+    {{ ', '.join(members) }}
+{% endmacro %}
