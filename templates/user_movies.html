@@ -25,7 +25,9 @@ User Movies
     </div>
 
     <div class="movie-grid">
-        {% for movie in user_movies %}
+        {% for user_movie in user_movies %}
+        {% set movie = user_movie['movie'] %}
+
         <div class="movie">
             <a href="https://www.imdb.com/title/{{ movie['imdb_id'] }}" target="_blank">
                 {% set poster_src = url_for('static', filename='placeholder_poster.jpg') if
@@ -39,7 +41,13 @@ User Movies
             <div class="movie-details">
                 <span class="movie-title">{{ movie['title'] }}</span>
                 <span class="movie-year">{{ movie['release_year'] }}</span>
-                <span class="movie-rating">{{ movie['rating'] }}</span>
+                <span class="movie-rating">
+                    {{ movie['rating'] }}
+
+                    {% if user_movie['personal_rating'] %}
+                        ({{ user_movie['personal_rating'] }})
+                    {% endif %}
+                </span>
                 <span class="movie-genres">
                     {{ ', '.join(movie['genres'] | map(attribute='name')) }}
                 </span>
@@ -84,7 +92,7 @@ User Movies
               method="POST"
         >
             <input type="text" name="personal_rating" value="{{ current_rating if current_rating }}"
-                   placeholder="Enter personal rating" required/>
+                   placeholder="Enter personal rating" autocomplete="off" required/>
             <input type="submit" value="Update"/>
             <input type="button" onclick="hideModal()" class="danger" value="Cancel"/>
         </form>

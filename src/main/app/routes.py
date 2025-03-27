@@ -26,7 +26,7 @@ def user_movies(user_id):
     if not user:
         return "Not Found", 404
 
-    return render_template("user_movies.html", user=user, user_movies=user.movies, msg=msg,
+    return render_template("user_movies.html", user=user, user_movies=user.movie_associations, msg=msg,
                            msg_lvl=msg_lvl, movie_to_update=movie_to_update,
                            current_rating=current_rating)
 

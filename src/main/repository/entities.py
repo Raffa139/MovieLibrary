@@ -74,6 +74,7 @@ class MovieUserAssociation(db.Model):
 
     movie_id = Column(Integer, ForeignKey(Movie.id), primary_key=True)
     user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
+    movie = relationship("Movie", foreign_keys="MovieUserAssociation.movie_id")
     personal_rating = Column(Float)
 
     def __repr__(self):
