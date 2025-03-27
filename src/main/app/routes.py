@@ -43,12 +43,13 @@ def add_user_movie(user_id):
     if not repo.has_user(user_id):
         return "Not Found", 404
 
-    if repo.has_user_movie(user_id, movie_id):
+    movie = repo.find_movie_by_title(movie_title)
+    if repo.has_user_movie(user_id, movie_id) or (movie and repo.has_user_movie(user_id, movie.id)):
         return redirect(
             url_for("main.user_movies", user_id=user_id, msg="Movie already in favourites!",
                     msg_lvl="error"))
 
-    if repo.has_movie(movie_id):
+    if repo.has_movie(id=movie_id) or repo.has_movie(title=movie_title):
         repo.add_user_movie(user_id, movie_id)
     else:
         omdb_client = OmdbClient(api_key=omdb_api_key())

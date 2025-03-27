@@ -11,7 +11,7 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def find_movies_by_title(self, title):
+    def find_movie_by_title(self, title):
         pass
 
     @abstractmethod
@@ -19,7 +19,7 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def has_movie(self, id):
+    def has_movie(self, *, id=None, title=None):
         pass
 
     @abstractmethod
