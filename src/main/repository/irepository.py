@@ -43,7 +43,7 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def add_user(self, username):
+    def add_user(self, username, profile_picture_file_name):
         pass
 
     @abstractmethod

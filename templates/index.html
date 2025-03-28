@@ -12,10 +12,15 @@ My Movie App
         {% for user in users %}
         <a href="{{ url_for('main.user_movies', user_id=user['id']) }}">
             <div class="user-item">
-                <img src="{{ url_for('static', filename='placeholder_profile_picture.jpg') }}"
+                {% set profile_picture_src = url_for('static',
+                filename='images/placeholder_profile_picture.jpg') if not user['profile_picture']
+                else url_for('static', filename='uploads/' + user['profile_picture']) %}
+
+                <img src="{{ profile_picture_src }}"
                      alt="Profile-Picture-{{ user['username'] }}"
                      class="user-picture"
                 />
+
                 <span class="text-ellipsis">{{ user['username'] }}</span>
             </div>
         </a>

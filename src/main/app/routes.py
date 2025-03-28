@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+import os
+from uuid import uuid4
+from flask import Blueprint, render_template, request, redirect, url_for, current_app as app
 from repository.sqlite_repository import repo
 from omdb.omdb_client import OmdbClient
 from environment import omdb_api_key
@@ -37,6 +39,23 @@ def add_user():
     if request.method == "GET":
         return render_template("add_user.html")
 
+    username = request.form.get("username")
+    profile_picture = request.files.get("profile_picture")
+    profile_picture_file_name = None
+
+    if not username:
+        return "Bad Request", 400
+
+    if profile_picture:
+        if not __allowed_file_type(profile_picture):
+            return "Bad Request", 400
+
+        if not __allowed_file_size(profile_picture):
+            return "Bad Request", 400
+
+        profile_picture_file_name = __store_file(profile_picture)
+
+    repo.add_user(username, profile_picture_file_name)
     return redirect(url_for("main.index", msg="User created successfully!", msg_lvl="success"))
 
 
@@ -116,3 +135,33 @@ def delete_user_movie(user_id, movie_id):
         msg_lvl = "error"
 
     return redirect(url_for("main.user_movies", user_id=user_id, msg=msg, msg_lvl=msg_lvl))
+
+
+def __get_file_extension(filename):
+    if not "." in filename:
+        raise ValueError()
+    return filename.split(".")[-1].lower()
+
+
+def __store_file(file):
+    extension = __get_file_extension(file.filename)
+    filename = f"{str(uuid4())}.{extension}"
+    filepath = os.path.join(app.config.get("UPLOADS_FOLDER"), filename)
+    file.save(filepath)
+    return filename
+
+
+def __allowed_file_type(file):
+    filename = file.filename
+
+    try:
+        return filename and __get_file_extension(filename) in app.config.get("ALLOWED_FILE_TYPES")
+    except ValueError:
+        return False
+
+
+def __allowed_file_size(file):
+    file.seek(0, os.SEEK_END)
+    size = file.tell()
+    file.seek(0)
+    return size <= app.config.get("MAX_FILE_SIZE")

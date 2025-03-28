@@ -11,7 +11,7 @@ Add User
     <form action="{{ url_for('main.add_user') }}" method="POST" enctype="multipart/form-data">
         <div class="input-group">
             <img id="profile-picture-upload-handle"
-                 src="{{ url_for('static', filename='placeholder_profile_picture.jpg') }}"
+                 src="{{ url_for('static', filename='images/placeholder_profile_picture.jpg') }}"
                  alt="Profile-Picture"
                  class="user-picture"
             />
@@ -31,5 +31,5 @@ Add User
     </form>
 </div>
 
-<script src="{{ url_for('static', filename='users.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/users.js') }}"></script>
 {% endblock %}

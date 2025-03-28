@@ -34,8 +34,9 @@ User Movies
 
         <div class="movie">
             <a href="https://www.imdb.com/title/{{ movie['imdb_id'] }}" target="_blank">
-                {% set poster_src = url_for('static', filename='placeholder_poster.jpg') if
+                {% set poster_src = url_for('static', filename='images/placeholder_poster.jpg') if
                 movie['poster_url'] == 'N/A' else movie['poster_url'] %}
+
                 <img class="movie-poster"
                      src="{{ poster_src }}"
                      alt="{{ movie['title'] }}-Poster"
@@ -104,5 +105,5 @@ User Movies
 </div>
 {% endif %}
 
-<script src="{{ url_for('static', filename='movies.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/movies.js') }}"></script>
 {% endblock %}

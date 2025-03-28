@@ -116,8 +116,8 @@ class SQLiteRepository(IRepository):
         except NoResultFound:
             return None
 
-    def add_user(self, username):
-        user = User(username=username)
+    def add_user(self, username, profile_picture_file_name):
+        user = User(username=username, profile_picture=profile_picture_file_name)
 
         try:
             db.session.add(user)
