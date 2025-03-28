@@ -191,24 +191,59 @@ h1, h2, h3 {
     border-radius: var(--border-radius);
     background: linear-gradient(to bottom right, var(--gradient-light-start), var(--gradient-light-end));
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    width: 256px;
+    height: 100%;
 }
 
 .movie-details {
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    padding: 0 10px 10px;
+    height: 100%;
+}
+
+.movie-details-group {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 10px;
-    max-width: 236px;
+    width: 100%;
 }
 
 .movie-title {
     font-size: 1.25em;
     color: var(--heading-primary);
+    text-align: center;
+    width: 90%;
+}
+
+.movie-year {
+    font-size: 0.85em;
+}
+
+.movie-rating {
+    color: var(--heading-primary);
+}
+
+.movie-genres {
+    color: var(--heading-primary);
+    text-align: center;
+    width: 90%;
+}
+
+.movie-crew-group {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    width: 100%;
+}
+
+.movie-crew-people {
+    color: var(--heading-primary);
 }
 
 .movie-poster {
-    width: 256px;
-    height: 400px;
+    width: 100%;
     object-fit: cover;
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
@@ -218,6 +253,7 @@ h1, h2, h3 {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    margin-top: 10px;
 }
 
 .modal {

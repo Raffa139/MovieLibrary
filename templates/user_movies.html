@@ -44,30 +44,50 @@ User Movies
             </a>
 
             <div class="movie-details">
-                <span class="movie-title">{{ movie['title'] }}</span>
-                <span class="movie-year">{{ movie['release_year'] }}</span>
-                <span class="movie-rating">
-                    {{ movie['rating'] }}
+                <div class="movie-details-group">
+                    <span class="movie-year">{{ movie['release_year'] }}</span>
+                    <span class="movie-title text-ellipsis">{{ movie['title'] }}</span>
+                </div>
 
-                    {% if user_movie['personal_rating'] %}
-                        ({{ user_movie['personal_rating'] }})
-                    {% endif %}
-                </span>
-                <span class="movie-genres">
-                    {{ ', '.join(movie['genres'] | map(attribute='name')) }}
-                </span>
-                <span class="movie-directors">
-                    Directors:
-                    {{ list_crew_members(movie['crew_members'], type='director') }}
-                </span>
-                <span class="movie-writers">
-                    Writers:
-                    {{ list_crew_members(movie['crew_members'], type='writer') }}
-                </span>
-                <span class="movie-actors">
-                    Actors:
-                    {{ list_crew_members(movie['crew_members'], type='actor') }}
-                </span>
+                <div class="movie-details-group">
+                    {% set personal_rating = user_movie['personal_rating'] if
+                    user_movie['personal_rating'] else '--' %}
+
+                    <div>
+                        Rating: <span class="movie-rating">{{ movie['rating'] }}</span>
+                    </div>
+
+                    <div>
+                        You rated: <span class="movie-rating">{{ personal_rating }}</span>
+                    </div>
+                </div>
+
+                <div class="movie-details-group">
+                    <span class="movie-genres text-ellipsis">{{ ', '.join(movie['genres'] | map(attribute='name')) }}</span>
+                </div>
+
+                <div class="movie-details-group" style="gap: 5px">
+                    <div class="movie-crew-group">
+                        <span>Directed by</span>
+                        <span class="movie-crew-people text-ellipsis">
+                            {{ list_crew_members(movie['crew_members'], type='director') }}
+                        </span>
+                    </div>
+
+                    <div class="movie-crew-group">
+                        <span>Written by</span>
+                        <span class="movie-crew-people text-ellipsis">
+                            {{ list_crew_members(movie['crew_members'], type='writer') }}
+                        </span>
+                    </div>
+
+                    <div class="movie-crew-group">
+                        <span>Actors</span>
+                        <span class="movie-crew-people text-ellipsis">
+                            {{ list_crew_members(movie['crew_members'], type='actor') }}
+                        </span>
+                    </div>
+                </div>
 
                 <div class="movie-buttons">
                     <form action="{{ url_for('main.update_user_movie', user_id=user['id'], movie_id=movie['id']) }}"
