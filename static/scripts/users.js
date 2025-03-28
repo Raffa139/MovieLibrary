@@ -1,22 +1,20 @@
-const handleProfilePicture = () => {
+const handleProfilePictureInput = () => {
+    const uploadHandle = document.querySelector("#profile-picture-upload-handle");
+    const uploadInput = document.querySelector("#profile-picture-input");
 
-};
+    const handleFileChange = () => {
+        [file] = uploadInput.files;
 
-const uploadHandle = document.querySelector("#profile-picture-upload-handle");
-const uploadInput = document.querySelector("#profile-picture-input");
+        const fileReader = new FileReader();
+        fileReader.onload = (event) => {
+            uploadHandle.src = event.target.result;
+        };
 
-const handleFileChange = () => {
-    [file] = uploadInput.files;
-
-    const fileReader = new FileReader();
-    fileReader.onload = (event) => {
-        uploadHandle.src = event.target.result;
+        fileReader.readAsDataURL(file);
     };
 
-    fileReader.readAsDataURL(file);
+    uploadInput.addEventListener("change", handleFileChange);
+    uploadHandle.addEventListener("click", () => uploadInput.click());
 };
 
-uploadInput.addEventListener("change", handleFileChange);
-uploadHandle.addEventListener("click", () => uploadInput.click());
-
-//window.onload = () => handleProfilePicture();
+handleProfilePictureInput();
