@@ -1,16 +1,18 @@
+const clearMessageFromUrl = () => {
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    ["msg", "msg_lvl"].forEach(param => searchParams.delete(param));
+    url.search = searchParams.toString();
+    window.history.replaceState({}, document.title, url.toString());
+};
+
 const handleMessage = () => {
     const msg = document.querySelector("#msg");
     const msgTimer = document.querySelector("#msg-timer");
 
     if (msg && msgTimer) {
-        new ResizeObserver(changes => {
-            [change] = changes;
-            width = change.contentRect.width;
-
-            if (width <= 0.25) {
-                msg.classList.add("hidden");
-            }
-        }).observe(msgTimer)
+        msgTimer.addEventListener("animationend", () => msg.classList.add("hidden"));
+        clearMessageFromUrl();
     }
 };
 

@@ -346,7 +346,7 @@ input[type="text"]:focus {
 }
 
 .message-timer {
-    width: 0;
+    width: 100%;
     height: 3px;
     animation-name: slide-timer;
     animation-duration: 5s;
