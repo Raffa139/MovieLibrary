@@ -48,10 +48,14 @@ def add_user():
 
     if profile_picture:
         if not __allowed_file_type(profile_picture):
-            return "Bad Request", 400
+            return render_template("add_user.html", username=username,
+                                   msg="Invalid file type of profile picture!",
+                                   msg_lvl="error")
 
         if not __allowed_file_size(profile_picture):
-            return "Bad Request", 400
+            return render_template("add_user.html", username=username,
+                                   msg="Profile picture too big! Max. 2MB",
+                                   msg_lvl="error")
 
         profile_picture_file_name = __store_file(profile_picture)
 
