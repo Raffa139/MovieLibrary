@@ -83,7 +83,7 @@ def add_user_movie(user_id):
                     msg_lvl="error"))
 
     if repo.has_movie(id=movie_id) or repo.has_movie(title=movie_title):
-        repo.add_user_movie(user_id, movie_id)
+        repo.add_user_movie(user_id, movie_id or movie.id)
     else:
         omdb_client = OmdbClient(api_key=omdb_api_key())
         movie = omdb_client.find_movie_by_title(movie_title)

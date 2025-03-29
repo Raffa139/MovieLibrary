@@ -36,9 +36,8 @@ User Movies
         </select>
 
         {% if user_movies|length >= start_recommendations %}
-        <button onclick="handleRecommendations()" style="align-self: flex-end">
-            Recommendations
-        </button>
+        <input type="button" onclick="handleRecommendations()" value="Recommendations"
+               style="align-self: flex-end">
         {% endif %}
     </div>
 

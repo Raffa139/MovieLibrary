@@ -10,6 +10,11 @@ const getRecommendations = async () => {
     throw Error(`Unexpected error while getting recommendations ${res.statusText}`);
 };
 
+const handleAddClick = async (title) => {
+    const res = await addMovie(undefined, title);
+    window.location.replace(res.url);
+};
+
 const createNode = (tag, children=undefined, classes=[], attrs={}) => {
     const node = document.createElement(tag);
     classes.forEach(cssClass => node.classList.add(cssClass));
@@ -105,7 +110,7 @@ const createDetailsElement = (title, release_year, rating, genres, directors, wr
         createNode("input",
             undefined,
             [],
-            { type: "submit", value: "Add", onclick: () => console.log(`Clicked ${title}`) }
+            { type: "submit", value: "Add", onclick: () => handleAddClick(title) }
         ),
         ["movie-buttons"]
     );
@@ -134,7 +139,6 @@ const createMovieGrid = (recommendations) => {
 const handleRecommendations = async () => {
     if (fetchRecommendations) {
         const recommendations = await getRecommendations();
-        console.log("NEW REC", recommendations)
         createMovieGrid(recommendations);
         fetchRecommendations = false;
     }
