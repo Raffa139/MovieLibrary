@@ -1,6 +1,5 @@
-const API_URL = "/api"
-const API_MOVIES = "movies"
-const OMDB_MOVIES = "omdb-movies"
+const API_MOVIES = "movies";
+const OMDB_MOVIES = "omdb-movies";
 
 const searchMoviesByTitle = async (endpoint, title) => {
     const url = `${API_URL}/${endpoint}?title=${title}`;

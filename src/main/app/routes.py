@@ -29,6 +29,7 @@ def user_movies(user_id):
         return "Not Found", 404
 
     return render_template("user_movies.html", user=user, user_movies=user.movie_associations,
+                           start_recommendations=app.config.get("START_RECOMMENDATIONS"),
                            msg=msg,
                            msg_lvl=msg_lvl, movie_to_update=movie_to_update,
                            current_rating=current_rating)

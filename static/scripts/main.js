@@ -1,3 +1,5 @@
+const API_URL = "/api";
+
 const clearMessageFromUrl = () => {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
@@ -16,9 +18,14 @@ const handleMessage = () => {
     }
 };
 
-const hideModal = () => {
-    const modal = document.querySelector("#modal");
+const hideModal = (id) => {
+    const modal = document.querySelector(`#${id}`);
     modal.classList.add("hidden");
+};
+
+const showModal = (id) => {
+    const modal = document.querySelector(`#${id}`);
+    modal.classList.remove("hidden");
 };
 
 window.onload = () => handleMessage();

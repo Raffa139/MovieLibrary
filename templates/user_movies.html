@@ -34,9 +34,15 @@ User Movies
             <option value="normal" selected>Normal</option>
             <option value="wide">Wide</option>
         </select>
+
+        {% if user_movies|length >= start_recommendations %}
+        <button onclick="handleRecommendations()" style="align-self: flex-end">
+            Recommendations
+        </button>
+        {% endif %}
     </div>
 
-    <div class="movie-grid">
+    <div id="favourites-movie-grid" class="movie-grid">
         {% for user_movie in user_movies %}
         {% set movie = user_movie['movie'] %}
 
@@ -116,10 +122,23 @@ User Movies
     </div>
 </div>
 
+<div id="recommendations-modal" class="modal hidden">
+    <div class="dialog">
+        <div class="heading">
+            <h2>Recommendations based on your movies</h2>
+            <input type="button" onclick="hideModal('recommendations-modal')" value="Close">
+        </div>
+
+        <div id="recommendations-movie-grid" class="movie-grid"></div>
+    </div>
+</div>
+
 {% if movie_to_update %}
-<div id="modal" class="modal">
-    <div class="update-dialog">
-        <h2>Update Movie</h2>
+<div id="update-modal" class="modal">
+    <div class="dialog">
+        <div class="heading">
+            <h2>Update Movie</h2>
+        </div>
 
         <form action="{{ url_for('main.update_user_movie', user_id=user['id'], movie_id=movie_to_update) }}"
               method="POST"
@@ -127,12 +146,13 @@ User Movies
             <input type="text" name="personal_rating" value="{{ current_rating if current_rating }}"
                    placeholder="Enter personal rating" autocomplete="off" required/>
             <input type="submit" value="Update"/>
-            <input type="button" onclick="hideModal()" class="danger" value="Cancel"/>
+            <input type="button" onclick="hideModal('update-modal')" class="danger" value="Cancel"/>
         </form>
     </div>
 </div>
 {% endif %}
 
-<script src="{{ url_for('static', filename='scripts/movie_search.js') }}"></script>
-<script src="{{ url_for('static', filename='scripts/movie_view.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/movie_search.js') }}" defer></script>
+<script src="{{ url_for('static', filename='scripts/movie_view.js') }}" defer></script>
+<script src="{{ url_for('static', filename='scripts/recommendations.js') }}" defer></script>
 {% endblock %}

@@ -9,7 +9,7 @@ const handleMovieViewMode = () => {
 
         const handleChange = (event) => {
             const viewMode = event.target.value;
-            const movies = document.querySelectorAll(".movie");
+            const movies = document.querySelectorAll("#favourites-movie-grid .movie");
             movies.forEach(movie => changeClass(movie, viewMode));
         };
 

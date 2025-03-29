@@ -258,6 +258,7 @@ h1, h2, h3 {
 .movie-poster {
     width: 100%;
     object-fit: cover;
+    aspect-ratio: 2 / 3;
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
 }
@@ -277,8 +278,8 @@ h1, h2, h3 {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-.update-dialog {
-    margin: 10% auto;
+.modal > .dialog {
+    margin: 5% auto;
     padding: 20px;
     width: fit-content;
     border: 1px solid var(--border-light);
@@ -286,7 +287,9 @@ h1, h2, h3 {
     background-color: var(--bg-primary);
 }
 
-.update-dialog > h2 {
+.dialog > .heading {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
