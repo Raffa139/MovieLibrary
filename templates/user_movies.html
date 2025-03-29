@@ -18,21 +18,29 @@ User Movies
     </div>
 
     <div class="search">
-        <input id="new-movie" type="text" onkeyup="handleKeyUp()" placeholder="Add new Movie"
-               autocomplete="off"/>
+        <div>
+            <input id="new-movie" type="text" onkeyup="handleKeyUp()" placeholder="Add new Movie"
+                   autocomplete="off"/>
 
-        <div id="search-results" class="hidden">
-            <div id="no-results" class="result-item">
-                No movies found
+            <div id="search-results" class="hidden">
+                <div id="no-results" class="result-item">
+                    No movies found
+                </div>
             </div>
         </div>
+
+        <select id="movie-view" style="align-self: flex-end">
+            <option value="compact">Compact</option>
+            <option value="normal" selected>Normal</option>
+            <option value="wide">Wide</option>
+        </select>
     </div>
 
     <div class="movie-grid">
         {% for user_movie in user_movies %}
         {% set movie = user_movie['movie'] %}
 
-        <div class="movie">
+        <div class="movie normal">
             <a href="https://www.imdb.com/title/{{ movie['imdb_id'] }}" target="_blank">
                 {% set poster_src = url_for('static', filename='images/placeholder_poster.jpg') if
                 movie['poster_url'] == 'N/A' else movie['poster_url'] %}
@@ -125,5 +133,6 @@ User Movies
 </div>
 {% endif %}
 
-<script src="{{ url_for('static', filename='scripts/movies.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/movie_search.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/movie_view.js') }}"></script>
 {% endblock %}
