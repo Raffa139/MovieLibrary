@@ -4,3 +4,4 @@ flask_sqlalchemy
 load_dotenv
 requests
 pytest
+google-genai

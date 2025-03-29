@@ -16,6 +16,11 @@ def omdb_api_key():
     return os.getenv("OMDb_API_KEY")
 
 
+def gemini_api_key():
+    load_dotenv()
+    return os.getenv("GEMINI_API_KEY")
+
+
 def database_uri():
     load_dotenv()
     return os.getenv("DATABASE_URI")

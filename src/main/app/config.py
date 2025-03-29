@@ -9,3 +9,4 @@ class Config:
     UPLOADS_FOLDER = UPLOADS_DIR
     ALLOWED_FILE_TYPES = ("png", "jpg", "jpeg", "gif")
     MAX_FILE_SIZE = 2 * 1024 * 1024  # 2MB
+    START_RECOMMENDATIONS = 3
