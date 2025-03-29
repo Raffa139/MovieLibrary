@@ -1,6 +1,6 @@
 import os
 from uuid import uuid4
-from flask import Blueprint, render_template, request, redirect, url_for, current_app as app
+from flask import Blueprint, render_template, request, redirect, url_for, abort, current_app as app
 from repository.sqlite_repository import repo
 from omdb.omdb_client import OmdbClient
 from environment import omdb_api_key
@@ -26,7 +26,7 @@ def user_movies(user_id):
     user = repo.find_user_by_id(user_id)
 
     if not user:
-        return "Not Found", 404
+        return abort(404)
 
     return render_template("user_movies.html", user=user, user_movies=user.movie_associations,
                            start_recommendations=app.config.get("START_RECOMMENDATIONS"),
@@ -74,7 +74,7 @@ def add_user_movie(user_id):
         return "Bad Request", 400
 
     if not repo.has_user(user_id):
-        return "Not Found", 404
+        return abort(404)
 
     movie = repo.find_movie_by_title(movie_title)
     if repo.has_user_movie(user_id, movie_id) or (movie and repo.has_user_movie(user_id, movie.id)):
@@ -111,7 +111,7 @@ def update_user_movie(user_id, movie_id):
         user_movie = repo.find_user_movie(user_id, movie_id)
 
         if not user_movie:
-            return "Not Found", 404
+            return abort(404)
 
         current_rating = user_movie.personal_rating
         return redirect(url_for("main.user_movies", user_id=user_id, movie_to_update=movie_id,
@@ -140,6 +140,16 @@ def delete_user_movie(user_id, movie_id):
         msg_lvl = "error"
 
     return redirect(url_for("main.user_movies", user_id=user_id, msg=msg, msg_lvl=msg_lvl))
+
+
+@bp.app_errorhandler(404)
+def not_found(e):
+    return render_template("404.html"), 404
+
+
+@bp.app_errorhandler(500)
+def server_error(e):
+    return render_template("500.html"), 500
 
 
 def __get_file_extension(filename):

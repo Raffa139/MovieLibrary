@@ -459,3 +459,16 @@ select option {
 .hidden {
     display: none !important;
 }
+
+.error-code {
+    font-size: 8em;
+    font-weight: bold;
+    text-align: center;
+    color: var(--accent-hover);
+    margin-bottom: 10px;
+}
+
+.error-message {
+    font-size: 2em;
+    text-align: center;
+}
