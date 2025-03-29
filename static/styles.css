@@ -182,6 +182,12 @@ h1, h2, h3 {
     margin-bottom: 20px;
 }
 
+.movie-list-controls {
+    display: flex;
+    gap: 5px;
+    align-self: flex-end;
+}
+
 .movie-grid {
     display: flex;
     justify-content: center;
@@ -330,39 +336,39 @@ h1, h2, h3 {
 
 input[type="button"],
 input[type="submit"] {
-  background: linear-gradient(to right, var(--gradient-light-start), var(--gradient-light-end));
-  color: var(--text-primary);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--border-radius);
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: all 300ms ease;
+    background: linear-gradient(to right, var(--gradient-light-start), var(--gradient-light-end));
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 300ms ease;
 }
 
 input[type="button"].danger,
 input[type="submit"].danger {
-  background: linear-gradient(to right, var(--danger-light), var(--danger-dark));
-  border: 1px solid var(--danger-light);
-  border-radius: var(--border-radius);
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: all 300ms ease;
+    background: linear-gradient(to right, var(--danger-light), var(--danger-dark));
+    border: 1px solid var(--danger-light);
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 300ms ease;
 }
 
 input[type="button"]:focus,
 input[type="submit"]:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--accent-hover);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-hover);
 }
 
 input[type="button"].danger:focus,
 input[type="submit"].danger:focus {
-  box-shadow: 0 0 0 2px var(--danger-light);
+    box-shadow: 0 0 0 2px var(--danger-light);
 }
 
 input[type="button"]:active,
 input[type="submit"]:active {
-  transform: scale(0.97);
+    transform: scale(0.97);
 }
 
 input[type="text"] {
@@ -378,9 +384,32 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-  outline: none;
-  border-color: var(--accent-hover);
-  box-shadow: 0 0 0 2px rgba(var(--accent-hover-rgb), 0.3);
+    outline: none;
+    border-color: var(--accent-hover);
+    box-shadow: 0 0 0 2px rgba(var(--accent-hover-rgb), 0.3);
+}
+
+select {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    padding: 5px 10px;
+    font-family: inherit;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent-hover);
+    box-shadow: 0 0 0 2px rgba(var(--accent-hover-rgb), 0.3);
+}
+
+select option {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .message {
@@ -407,8 +436,8 @@ input[type="text"]:focus {
 }
 
 @keyframes slide-timer {
-  from { width: 100%; }
-  to { width: 0%; }
+    from { width: 100%; }
+    to { width: 0%; }
 }
 
 .success > .message-timer {

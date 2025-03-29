@@ -29,16 +29,17 @@ User Movies
             </div>
         </div>
 
-        <select id="movie-view" style="align-self: flex-end">
-            <option value="compact">Compact</option>
-            <option value="normal" selected>Normal</option>
-            <option value="wide">Wide</option>
-        </select>
+        <div class="movie-list-controls">
+            {% if user_movies|length >= start_recommendations %}
+            <input type="button" onclick="handleRecommendations()" value="Recommendations">
+            {% endif %}
 
-        {% if user_movies|length >= start_recommendations %}
-        <input type="button" onclick="handleRecommendations()" value="Recommendations"
-               style="align-self: flex-end">
-        {% endif %}
+            <select id="movie-view">
+                <option value="compact">Compact View</option>
+                <option value="normal" selected>Normal View</option>
+                <option value="wide">Wide View</option>
+            </select>
+        </div>
     </div>
 
     <div id="favourites-movie-grid" class="movie-grid">
