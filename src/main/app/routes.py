@@ -35,6 +35,57 @@ def user_movies(user_id):
                            current_rating=current_rating)
 
 
+@bp.route("/users/<int:user_id>", methods=["POST"])
+def add_user_movie(user_id):
+    json = request.json
+    movie_id = json.get("id")
+    movie_title = json.get("title")
+
+    if movie_title is None:
+        return "Bad Request", 400
+
+    if not repo.has_user(user_id):
+        return abort(404)
+
+    movie = repo.find_movie_by_title(movie_title)
+    has_user_movie_by_id = repo.has_user_movie(user_id, movie_id)
+    has_user_movie_by_title = movie and repo.has_user_movie(user_id, movie.id)
+    user_has_movie_in_favourites = has_user_movie_by_id or has_user_movie_by_title
+
+    if user_has_movie_in_favourites:
+        return redirect(
+            url_for("main.user_movies", user_id=user_id, msg="Movie already in favourites!",
+                    msg_lvl="error"))
+
+    try:
+        movie_in_db = repo.has_movie(id=movie_id) or repo.has_movie(title=movie_title)
+        if movie_in_db:
+            repo.add_user_movie(user_id, movie_id or movie.id)
+        else:
+            omdb_client = OmdbClient(api_key=omdb_api_key())
+            movie = omdb_client.find_movie_by_title(movie_title)
+
+            new_movie = repo.add_movie(
+                movie.get("title"),
+                movie.get("release_year"),
+                movie.get("rating"),
+                movie.get("poster_url"),
+                movie.get("imdb_id"),
+                movie.get("genres"),
+                movie.get("directors"),
+                movie.get("writers"),
+                movie.get("actors")
+            )
+            repo.add_user_movie(user_id, new_movie.id)
+
+        return redirect(
+            url_for("main.user_movies", user_id=user_id, msg="Movie added successfully!",
+                    msg_lvl="success"))
+    except Exception as e:
+        app.logger.error(e)
+        return abort(500)
+
+
 @bp.route("/users/new", methods=["GET", "POST"])
 def add_user():
     if request.method == "GET":
@@ -60,53 +111,22 @@ def add_user():
 
         profile_picture_file_name = __store_file(profile_picture)
 
-    repo.add_user(username, profile_picture_file_name)
-    return redirect(url_for("main.index", msg="User created successfully!", msg_lvl="success"))
-
-
-@bp.route("/users/<int:user_id>", methods=["POST"])
-def add_user_movie(user_id):
-    json = request.json
-    movie_id = json.get("id")
-    movie_title = json.get("title")
-
-    if movie_title is None:
-        return "Bad Request", 400
-
-    if not repo.has_user(user_id):
-        return abort(404)
-
-    movie = repo.find_movie_by_title(movie_title)
-    if repo.has_user_movie(user_id, movie_id) or (movie and repo.has_user_movie(user_id, movie.id)):
-        return redirect(
-            url_for("main.user_movies", user_id=user_id, msg="Movie already in favourites!",
-                    msg_lvl="error"))
-
-    if repo.has_movie(id=movie_id) or repo.has_movie(title=movie_title):
-        repo.add_user_movie(user_id, movie_id or movie.id)
-    else:
-        omdb_client = OmdbClient(api_key=omdb_api_key())
-        movie = omdb_client.find_movie_by_title(movie_title)
-
-        new_movie = repo.add_movie(
-            movie.get("title"),
-            movie.get("release_year"),
-            movie.get("rating"),
-            movie.get("poster_url"),
-            movie.get("imdb_id"),
-            movie.get("genres"),
-            movie.get("directors"),
-            movie.get("writers"),
-            movie.get("actors")
-        )
-        repo.add_user_movie(user_id, new_movie.id)
-
-    return redirect(url_for("main.user_movies", user_id=user_id, msg="Movie added successfully!",
-                            msg_lvl="success"))
+    try:
+        repo.add_user(username, profile_picture_file_name)
+        return redirect(url_for("main.index", msg="User created successfully!", msg_lvl="success"))
+    except Exception as e:
+        app.logger.error(e)
+        return abort(500)
 
 
 @bp.route("/users/<int:user_id>/update-movie/<int:movie_id>", methods=["GET", "POST"])
 def update_user_movie(user_id, movie_id):
+    if not repo.has_user(user_id):
+        return abort(404)
+
+    if not repo.has_movie(id=movie_id):
+        return abort(404)
+
     if request.method == "GET":
         user_movie = repo.find_user_movie(user_id, movie_id)
 
@@ -119,26 +139,22 @@ def update_user_movie(user_id, movie_id):
 
     personal_rating = request.form.get("personal_rating")
     success = repo.update_user_movie(user_id, movie_id, personal_rating)
-
-    msg = "Movie updated successfully!"
-    msg_lvl = "success"
-    if not success:
-        msg = "Failed to update movie!"
-        msg_lvl = "error"
-
+    msg = "Movie updated successfully!" if success else "Failed to update movie!"
+    msg_lvl = "success" if success else "error"
     return redirect(url_for("main.user_movies", user_id=user_id, msg=msg, msg_lvl=msg_lvl))
 
 
 @bp.route("/users/<int:user_id>/delete-movie/<int:movie_id>")
 def delete_user_movie(user_id, movie_id):
+    if not repo.has_user(user_id):
+        return abort(404)
+
+    if not repo.has_movie(id=movie_id):
+        return abort(404)
+
     success = repo.delete_user_movie(user_id, movie_id)
-
-    msg = "Movie deleted successfully!"
-    msg_lvl = "success"
-    if not success:
-        msg = "Failed to deleted movie!"
-        msg_lvl = "error"
-
+    msg = "Movie deleted successfully!" if success else "Failed to deleted movie!"
+    msg_lvl = "success" if success else "error"
     return redirect(url_for("main.user_movies", user_id=user_id, msg=msg, msg_lvl=msg_lvl))
 
 

@@ -60,8 +60,9 @@ class SQLiteRepository(IRepository):
 
             db.session.add(movie)
             db.session.flush()
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
             db.session.rollback()
+            raise e
 
         director_associations = [
             self.__create_movie_crew_member_association(director, movie.id, member_type="director")
@@ -81,8 +82,9 @@ class SQLiteRepository(IRepository):
             db.session.add_all(actor_associations)
             db.session.commit()
             return Movie.query.filter(Movie.id == movie.id).one()
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
             db.session.rollback()
+            raise e
 
     def add_genre(self, name):
         genre = Genre(name=name)
@@ -91,8 +93,9 @@ class SQLiteRepository(IRepository):
             db.session.add(genre)
             db.session.commit()
             return Genre.query.filter(Genre.id == genre.id).one()
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
             db.session.rollback()
+            raise e
 
     def find_genre_by_name(self, name):
         try:
@@ -107,8 +110,9 @@ class SQLiteRepository(IRepository):
             db.session.add(crew_member)
             db.session.commit()
             return CrewMember.query.filter(CrewMember.id == crew_member.id).one()
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
             db.session.rollback()
+            raise e
 
     def find_crew_member_by_name(self, full_name):
         try:
@@ -123,16 +127,18 @@ class SQLiteRepository(IRepository):
             db.session.add(user)
             db.session.commit()
             return User.query.filter(User.id == user.id).one()
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
             db.session.rollback()
+            raise e
 
     def add_user_movie(self, user_id, movie_id):
         try:
             user_movie = MovieUserAssociation(movie_id=movie_id, user_id=user_id)
             db.session.add(user_movie)
             db.session.commit()
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
             db.session.rollback()
+            raise e
 
     def find_all_users(self):
         return User.query.all()
