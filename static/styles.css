@@ -160,8 +160,11 @@ h1, h2, h3 {
 }
 
 .user-movies {
+    position: fixed;
     align-self: flex-start;
     padding: 20px;
+    width: 75%;
+    height: 100%;
 }
 
 .user-movies > .header {
@@ -193,13 +196,15 @@ h1, h2, h3 {
     justify-content: center;
     flex-wrap: wrap;
     gap: 25px;
+    padding-bottom: 10px;
+    height: calc(100% - 250px);
+    overflow-y: auto;
 }
 
 .movie {
     border-radius: var(--border-radius);
     background: linear-gradient(to bottom right, var(--gradient-light-start), var(--gradient-light-end));
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-    height: 100%;
 }
 
 .movie.compact {
@@ -219,7 +224,6 @@ h1, h2, h3 {
     flex-direction: column;
     gap: 10px;
     padding: 0 10px 10px;
-    height: 100%;
 }
 
 .movie-details-group {
