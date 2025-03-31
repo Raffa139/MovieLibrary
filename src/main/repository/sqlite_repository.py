@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 from .irepository import IRepository
 from .entities import Movie, Genre, CrewMember, User, MovieCrewMemberAssociation, \
@@ -6,28 +7,34 @@ from . import db
 
 
 class SQLiteRepository(IRepository):
+    def __init__(self, *, session):
+        self._session = session
+
     def find_all_movies(self):
-        return Movie.query.all()
+        query = select(Movie)
+        return self._exec_query(query).scalars().all()
 
     def find_movie_by_id(self, id):
         try:
-            return Movie.query.filter(Movie.id == id).one()
+            query = select(Movie).where(Movie.id == id)
+            return self._exec_query(query).scalar_one()
         except NoResultFound:
             return None
 
     def find_movie_by_title(self, title):
         try:
-            return Movie.query.filter(Movie.title == title).one()
+            query = select(Movie).where(Movie.title == title)
+            return self._exec_query(query).scalar_one()
         except NoResultFound:
             return None
 
     def find_movies_like(self, title, limit=None):
-        query = Movie.query.filter(Movie.title.ilike(f"%{title}%"))
+        query = select(Movie).where(Movie.title.ilike(f"%{title}%"))
 
         if limit:
-            return query.limit(limit).all()
+            query = query.limit(limit)
 
-        return query.all()
+        return self._exec_query(query).scalars().all()
 
     def has_movie(self, *, id=None, title=None):
         if id:
@@ -38,8 +45,18 @@ class SQLiteRepository(IRepository):
 
         return False
 
-    def add_movie(self, title, release_year, rating, poster_url, imdb_id, genre_names, directors,
-                  writers, actors):
+    def add_movie(
+            self,
+            title,
+            release_year,
+            rating,
+            poster_url,
+            imdb_id,
+            genre_names,
+            directors,
+            writers,
+            actors
+    ):
         genres = []
         for genre_name in genre_names:
             genre = self.find_genre_by_name(genre_name)
@@ -58,10 +75,10 @@ class SQLiteRepository(IRepository):
                           imdb_id=imdb_id,
                           genres=genres)
 
-            db.session.add(movie)
-            db.session.flush()
+            self._session.add(movie)
+            self._session.flush()
         except SQLAlchemyError as e:
-            db.session.rollback()
+            self._session.rollback()
             raise e
 
         director_associations = [
@@ -77,29 +94,30 @@ class SQLiteRepository(IRepository):
             for actor in actors]
 
         try:
-            db.session.add_all(director_associations)
-            db.session.add_all(writer_associations)
-            db.session.add_all(actor_associations)
-            db.session.commit()
-            return Movie.query.filter(Movie.id == movie.id).one()
+            self._session.add_all(director_associations)
+            self._session.add_all(writer_associations)
+            self._session.add_all(actor_associations)
+            self._session.commit()
+            return self._exec_query(select(Movie).where(Movie.id == movie.id)).scalar_one()
         except SQLAlchemyError as e:
-            db.session.rollback()
+            self._session.rollback()
             raise e
 
     def add_genre(self, name):
         genre = Genre(name=name)
 
         try:
-            db.session.add(genre)
-            db.session.commit()
-            return Genre.query.filter(Genre.id == genre.id).one()
+            self._session.add(genre)
+            self._session.commit()
+            return self._exec_query(select(Genre).where(Genre.id == genre.id)).scalar_one()
         except SQLAlchemyError as e:
-            db.session.rollback()
+            self._session.rollback()
             raise e
 
     def find_genre_by_name(self, name):
         try:
-            return Genre.query.filter(Genre.name == name).one()
+            query = select(Genre).where(Genre.name == name)
+            return self._exec_query(query).scalar_one()
         except NoResultFound:
             return None
 
@@ -107,16 +125,19 @@ class SQLiteRepository(IRepository):
         crew_member = CrewMember(full_name=full_name)
 
         try:
-            db.session.add(crew_member)
-            db.session.commit()
-            return CrewMember.query.filter(CrewMember.id == crew_member.id).one()
+            self._session.add(crew_member)
+            self._session.commit()
+            return self._exec_query(
+                select(CrewMember).where(CrewMember.id == crew_member.id)
+            ).scalar_one()
         except SQLAlchemyError as e:
-            db.session.rollback()
+            self._session.rollback()
             raise e
 
     def find_crew_member_by_name(self, full_name):
         try:
-            return CrewMember.query.filter(CrewMember.full_name == full_name).one()
+            query = select(CrewMember).where(CrewMember.full_name == full_name)
+            return self._exec_query(query).scalar_one()
         except NoResultFound:
             return None
 
@@ -124,28 +145,30 @@ class SQLiteRepository(IRepository):
         user = User(username=username, profile_picture=profile_picture_file_name)
 
         try:
-            db.session.add(user)
-            db.session.commit()
-            return User.query.filter(User.id == user.id).one()
+            self._session.add(user)
+            self._session.commit()
+            return self._exec_query(select(User).where(User.id == user.id)).scalar_one()
         except SQLAlchemyError as e:
-            db.session.rollback()
+            self._session.rollback()
             raise e
 
     def add_user_movie(self, user_id, movie_id):
         try:
             user_movie = MovieUserAssociation(movie_id=movie_id, user_id=user_id)
-            db.session.add(user_movie)
-            db.session.commit()
+            self._session.add(user_movie)
+            self._session.commit()
         except SQLAlchemyError as e:
-            db.session.rollback()
+            self._session.rollback()
             raise e
 
     def find_all_users(self):
-        return User.query.all()
+        query = select(User)
+        return self._exec_query(query).scalars().all()
 
     def find_user_by_id(self, id):
         try:
-            return User.query.filter(User.id == id).one()
+            query = select(User).where(User.id == id)
+            return self._exec_query(query).scalar_one()
         except NoResultFound:
             return None
 
@@ -154,9 +177,10 @@ class SQLiteRepository(IRepository):
 
     def find_user_movie(self, user_id, movie_id):
         try:
-            return MovieUserAssociation.query.filter(
+            query = select(MovieUserAssociation).where(
                 MovieUserAssociation.user_id == user_id, MovieUserAssociation.movie_id == movie_id
-            ).one()
+            )
+            return self._exec_query(query).scalar_one()
         except NoResultFound:
             return None
 
@@ -166,11 +190,11 @@ class SQLiteRepository(IRepository):
     def delete_user_movie(self, user_id, movie_id):
         try:
             user_movie = self.find_user_movie(user_id, movie_id)
-            db.session.delete(user_movie)
-            db.session.commit()
+            self._session.delete(user_movie)
+            self._session.commit()
             return True
         except SQLAlchemyError:
-            db.session.rollback()
+            self._session.rollback()
             return False
 
     def update_user_movie(self, user_id, movie_id, personal_rating):
@@ -181,11 +205,14 @@ class SQLiteRepository(IRepository):
                 return False
 
             user_movie.personal_rating = personal_rating
-            db.session.commit()
+            self._session.commit()
             return True
         except SQLAlchemyError:
-            db.session.rollback()
+            self._session.rollback()
             return False
+
+    def _exec_query(self, query):
+        return self._session.execute(query)
 
     def __create_movie_crew_member_association(self, crew_member_name, movie_id, member_type):
         crew_member = self.find_crew_member_by_name(crew_member_name)
@@ -201,4 +228,4 @@ class SQLiteRepository(IRepository):
                                           member_type=member_type)
 
 
-repo = SQLiteRepository()
+repo = SQLiteRepository(session=db.session)

@@ -15,7 +15,7 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def find_movies_like(self, title):
+    def find_movies_like(self, title, limit=None):
         pass
 
     @abstractmethod
@@ -23,7 +23,18 @@ class IRepository(ABC):
         pass
 
     @abstractmethod
-    def add_movie(self, title, release_year, rating, poster_url, imdb_id):
+    def add_movie(
+            self,
+            title,
+            release_year,
+            rating,
+            poster_url,
+            imdb_id,
+            genre_names,
+            directors,
+            writers,
+            actors
+    ):
         pass
 
     @abstractmethod
