@@ -1,6 +1,6 @@
 const getRecommendations = async () => {
     const pathname = new URL(window.location.href).pathname;
-    const url = `${API_URL}/${pathname}/recommendations`;
+    const url = `${API_URL}${pathname}/recommendations`;
     const res = await fetch(url);
 
     if (res.ok) {

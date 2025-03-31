@@ -51,6 +51,30 @@ moving beyond a static webpage.
 
 ---
 
+## How To Run
+
+Install dependencies:
+
+````commandline
+pip install -r requirements.txt
+````
+
+Create `.env` file in the project root with following content (insert your API keys):
+
+````
+OMDb_API_KEY="<Your-API-Key>"
+GEMINI_API_KEY="<Your-API-Key>"
+DATABASE_URI="sqlite:///data/movie_library.sqlite"
+````
+
+Create directory for profile picture uploads inside the `static` folder:
+
+````commandline
+mkdir static/uploads
+````
+
+---
+
 ## Final App Features
 
 A detailed overview of the features available in the final web application version of Phase 3,
@@ -146,7 +170,7 @@ The .env file has to provide the following parameters for API keys and the SQLit
 ````
 OMDb_API_KEY="<Your-API-Key>"
 GEMINI_API_KEY="<Your-API-Key>"
-DATABASE_URI="data/movie_library.sqlite"
+DATABASE_URI="sqlite:///data/movie_library.sqlite"
 ````
 
 ## Entity-Relationship-Diagram
