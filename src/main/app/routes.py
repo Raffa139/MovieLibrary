@@ -28,11 +28,16 @@ def user_movies(user_id):
     if not user:
         return abort(404)
 
-    return render_template("user_movies.html", user=user, user_movies=user.movie_associations,
-                           start_recommendations=app.config.get("START_RECOMMENDATIONS"),
-                           msg=msg,
-                           msg_lvl=msg_lvl, movie_to_update=movie_to_update,
-                           current_rating=current_rating)
+    return render_template(
+        "user_movies.html",
+        user=user,
+        user_movies=user.movie_associations,
+        start_recommendations=app.config.get("START_RECOMMENDATIONS"),
+        movie_to_update=movie_to_update,
+        current_rating=current_rating,
+        msg=msg,
+        msg_lvl=msg_lvl
+    )
 
 
 @bp.route("/users/<int:user_id>", methods=["POST"])
@@ -42,7 +47,7 @@ def add_user_movie(user_id):
     movie_title = json.get("title")
 
     if movie_title is None:
-        return "Bad Request", 400
+        return abort(400)
 
     if not repo.has_user(user_id):
         return abort(404)
@@ -53,9 +58,11 @@ def add_user_movie(user_id):
     user_has_movie_in_favourites = has_user_movie_by_id or has_user_movie_by_title
 
     if user_has_movie_in_favourites:
-        return redirect(
-            url_for("main.user_movies", user_id=user_id, msg="Movie already in favourites!",
-                    msg_lvl="error"))
+        return __redirect(
+            "main.user_movies",
+            ("Movie already in favourites!", "error"),
+            user_id=user_id
+        )
 
     try:
         movie_in_db = repo.has_movie(id=movie_id) or repo.has_movie(title=movie_title)
@@ -78,9 +85,11 @@ def add_user_movie(user_id):
             )
             repo.add_user_movie(user_id, new_movie.id)
 
-        return redirect(
-            url_for("main.user_movies", user_id=user_id, msg="Movie added successfully!",
-                    msg_lvl="success"))
+        return __redirect(
+            "main.user_movies",
+            ("Movie added successfully!", "success"),
+            user_id=user_id
+        )
     except Exception as e:
         app.logger.error(e)
         return abort(500)
@@ -96,24 +105,30 @@ def add_user():
     profile_picture_file_name = None
 
     if not username:
-        return "Bad Request", 400
+        return abort(400)
 
     if profile_picture:
         if not __allowed_file_type(profile_picture):
-            return render_template("add_user.html", username=username,
-                                   msg="Invalid file type of profile picture!",
-                                   msg_lvl="error")
+            return render_template(
+                "add_user.html",
+                username=username,
+                msg="Invalid file type of profile picture!",
+                msg_lvl="error"
+            )
 
         if not __allowed_file_size(profile_picture):
-            return render_template("add_user.html", username=username,
-                                   msg="Profile picture too big! Max. 2MB",
-                                   msg_lvl="error")
+            return render_template(
+                "add_user.html",
+                username=username,
+                msg="Profile picture too big! Max. 2MB",
+                msg_lvl="error"
+            )
 
         profile_picture_file_name = __store_file(profile_picture)
 
     try:
         repo.add_user(username, profile_picture_file_name)
-        return redirect(url_for("main.index", msg="User created successfully!", msg_lvl="success"))
+        return __redirect("main.index", ("User created successfully!", "success"))
     except Exception as e:
         app.logger.error(e)
         return abort(500)
@@ -134,14 +149,19 @@ def update_user_movie(user_id, movie_id):
             return abort(404)
 
         current_rating = user_movie.personal_rating
-        return redirect(url_for("main.user_movies", user_id=user_id, movie_to_update=movie_id,
-                                current_rating=current_rating))
+
+        return __redirect(
+            "main.user_movies",
+            user_id=user_id,
+            movie_to_update=movie_id,
+            current_rating=current_rating
+        )
 
     personal_rating = request.form.get("personal_rating")
     success = repo.update_user_movie(user_id, movie_id, personal_rating)
     msg = "Movie updated successfully!" if success else "Failed to update movie!"
     msg_lvl = "success" if success else "error"
-    return redirect(url_for("main.user_movies", user_id=user_id, msg=msg, msg_lvl=msg_lvl))
+    return __redirect("main.user_movies", (msg, msg_lvl), user_id=user_id)
 
 
 @bp.route("/users/<int:user_id>/delete-movie/<int:movie_id>")
@@ -155,7 +175,12 @@ def delete_user_movie(user_id, movie_id):
     success = repo.delete_user_movie(user_id, movie_id)
     msg = "Movie deleted successfully!" if success else "Failed to deleted movie!"
     msg_lvl = "success" if success else "error"
-    return redirect(url_for("main.user_movies", user_id=user_id, msg=msg, msg_lvl=msg_lvl))
+    return __redirect("main.user_movies", (msg, msg_lvl), user_id=user_id)
+
+
+@bp.app_errorhandler(400)
+def bad_request(e):
+    return render_template("400.html"), 400
 
 
 @bp.app_errorhandler(404)
@@ -166,6 +191,11 @@ def not_found(e):
 @bp.app_errorhandler(500)
 def server_error(e):
     return render_template("500.html"), 500
+
+
+def __redirect(endpoint, message=(None, None), **kwargs):
+    msg, msg_lvl = message
+    return redirect(url_for(endpoint, msg=msg, msg_lvl=msg_lvl, **kwargs))
 
 
 def __get_file_extension(filename):
