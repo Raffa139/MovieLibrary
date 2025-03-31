@@ -3,6 +3,8 @@ from definitions import TEMPLATES_DIR, STATIC_DIR, UPLOADS_DIR
 
 
 class Config:
+    """Configuration class for the Flask application."""
+
     SQLALCHEMY_DATABASE_URI = database_uri()
     TEMPLATE_FOLDER = TEMPLATES_DIR
     STATIC_FOLDER = STATIC_DIR

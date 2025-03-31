@@ -7,6 +7,15 @@ from .routes import bp as main
 
 
 def create_app(flask_config=Config):
+    """
+    Creates and configures the Flask application.
+
+    Args:
+        flask_config (object): The configuration object to use. Defaults to Config.
+
+    Returns:
+        Flask: The configured Flask application instance.
+    """
     app = Flask(__name__,
                 template_folder=flask_config.TEMPLATE_FOLDER,
                 static_folder=flask_config.STATIC_FOLDER)

@@ -19,13 +19,14 @@ class OmdbClient:
 
     def find_movie_by_title(self, title):
         """
-        Finds movie information by title using the OMDB API.
+        Finds detailed movie information by title using the OMDB API.
 
         Args:
             title (str): The title of the movie to search for.
 
         Returns:
-            tuple: A tuple containing the movie's title, year, IMDb rating, poster URL, and IMDb ID.
+            dict: A dictionary containing the movie's title, release year, IMDb rating, poster URL,
+                  IMDb ID, genres, directors, writers, and actors.
 
         Raises:
             PermissionError: If the API key is invalid.
@@ -60,6 +61,21 @@ class OmdbClient:
         })
 
     def search_movies(self, title):
+        """
+        Searches for movies by title using the OMDB API.
+
+        Args:
+            title (str): The title to search for.
+
+        Returns:
+            dict: A dictionary containing the total number of results and a list of matching movies,
+                  each with title, release year, poster URL, and IMDb ID.
+
+        Raises:
+            PermissionError: If the API key is invalid.
+            RuntimeError: If an unexpected error occurs during the API request.
+            ValueError: If no movies are found for the given title or too many are found.
+        """
         url = f"{OMDB_API}?apikey={self._api_key}&type=movie&s={title}"
         response = requests.get(url)
 
@@ -89,6 +105,16 @@ class OmdbClient:
         }
 
     def __sanitize_dict(self, dict):
+        """
+        Sanitizes string values within a dictionary by stripping leading/trailing whitespace
+        and recursively sanitizing lists and tuples.
+
+        Args:
+            dict (dict): The dictionary to sanitize.
+
+        Returns:
+            dict: The sanitized dictionary.
+        """
         sanitized_dict = {**dict}
         for key, value in dict.items():
             if isinstance(value, str):
@@ -100,10 +126,38 @@ class OmdbClient:
         return sanitized_dict
 
     def __sanitize_field(self, value):
+        """
+        Sanitizes a single string value by stripping leading/trailing whitespace.
+
+        Args:
+            value (str): The string value to sanitize.
+
+        Returns:
+            str: The sanitized string value.
+        """
         return value.strip()
 
     def __sanitize_fields(self, values):
+        """
+        Sanitizes a list or tuple of string values.
+
+        Args:
+            values (list or tuple): The list or tuple of string values to sanitize.
+
+        Returns:
+            list: A list containing the sanitized string values.
+        """
         return [self.__sanitize_field(value) for value in values]
 
     def __sanitize_year(self, year):
+        """
+        Sanitizes a year string by stripping whitespace and replacing '–' with '' before
+        converting to an integer.
+
+        Args:
+            year (str): The year string to sanitize.
+
+        Returns:
+            int: The sanitized year as an integer.
+        """
         return int(self.__sanitize_field(year).replace("–", ""))

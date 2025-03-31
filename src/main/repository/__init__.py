@@ -3,7 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 class Base(DeclarativeBase):
+    """Base class for SQLAlchemy declarative models, providing a default __repr__ method."""
+
     def __repr__(self):
+        """
+        Provides a default string representation for model instances, excluding SQLAlchemy
+        internals and the 'id' field.
+        """
         class_name = type(self).__name__
         class_fields = self.__dict__
 

@@ -10,6 +10,18 @@ bp = Blueprint("api", __name__)
 
 @bp.route("/movies")
 def get_movies():
+    """
+    Retrieves a list of movies from the local repository.
+
+    Query Parameters:
+        title (str, optional): If provided, filters movies whose title contains the given string
+        (case-insensitive).
+
+    Returns:
+        jsonify: A JSON response containing a list of movies.
+                 If a 'title' query parameter is provided, returns movies matching the title.
+                 Otherwise, returns all movies in the repository.
+    """
     title = request.args.get("title")
 
     if title:
@@ -22,6 +34,18 @@ def get_movies():
 
 @bp.route("/omdb-movies")
 def get_omdb_movies():
+    """
+    Retrieves movie information from the OMDB API based on a title.
+
+    Query Parameters:
+        title (str, required): The title of the movie to search for on OMDB.
+
+    Returns:
+        jsonify: A JSON response containing the search results from the OMDB API.
+                 Returns a list of movies matching the title, including total results.
+        tuple: A tuple containing a "Bad Request" message and a 400 status code if no title is
+        provided.
+    """
     omdb_client = OmdbClient(api_key=omdb_api_key())
     title = request.args.get("title")
 
@@ -37,6 +61,24 @@ def get_omdb_movies():
 
 @bp.route("/users/<int:user_id>/recommendations")
 def get_recommendations(user_id):
+    """
+    Retrieves movie recommendations for a specific user based on their favorite movies.
+
+    Path Parameters:
+        user_id (int): The ID of the user to get recommendations for.
+
+    Returns:
+        jsonify: A JSON response containing a list of recommended movie details fetched from OMDB.
+                 Returns an empty list if the user has fewer than the required number of favorite
+                 movies
+                 to generate recommendations.
+        tuple: A tuple containing a "Not Found" message and a 404 status code if the user with
+        the given ID does not exist.
+        tuple: A tuple containing an error message and a 401 status code if there is a permission
+        error with the Gemini API.
+        tuple: A tuple containing a "Too Many Requests" message and a 429 status code if the
+        Gemini API rate limit is exceeded.
+    """
     user = repo.find_user_by_id(user_id)
 
     if not user:
@@ -66,6 +108,15 @@ def get_recommendations(user_id):
 
 
 def __jsonify_entities(entities):
+    """
+    Helper function to jsonify a list of SQLAlchemy entities.
+
+    Args:
+        entities (list): A list of SQLAlchemy entity objects.
+
+    Returns:
+        jsonify: A JSON response containing a list of dictionaries representing the entities.
+    """
     return jsonify({
         "total_results": len(entities),
         "results": [entity.to_dict() for entity in entities]

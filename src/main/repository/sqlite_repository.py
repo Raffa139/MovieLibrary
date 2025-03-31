@@ -7,14 +7,37 @@ from . import db
 
 
 class SQLiteRepository(IRepository):
+    """A repository implementation using SQLite as the database."""
+
     def __init__(self, *, session):
+        """
+        Initializes the SQLiteRepository with a database session.
+
+        Args:
+            session (sqlalchemy.orm.Session): The SQLAlchemy session to use for database operations.
+        """
         self._session = session
 
     def find_all_movies(self):
+        """
+        Finds all movies in the database.
+
+        Returns:
+            list[Movie]: A list of all Movie objects in the database.
+        """
         query = select(Movie)
         return self._exec_query(query).scalars().all()
 
     def find_movie_by_id(self, id):
+        """
+        Finds a movie by its unique ID.
+
+        Args:
+            id (int): The ID of the movie to find.
+
+        Returns:
+            Movie or None: The Movie object with the given ID, or None if not found.
+        """
         try:
             query = select(Movie).where(Movie.id == id)
             return self._exec_query(query).scalar_one()
@@ -22,6 +45,15 @@ class SQLiteRepository(IRepository):
             return None
 
     def find_movie_by_title(self, title):
+        """
+        Finds a movie by its title.
+
+        Args:
+            title (str): The title of the movie to find.
+
+        Returns:
+            Movie or None: The Movie object with the given title, or None if not found.
+        """
         try:
             query = select(Movie).where(Movie.title == title)
             return self._exec_query(query).scalar_one()
@@ -29,6 +61,16 @@ class SQLiteRepository(IRepository):
             return None
 
     def find_movies_like(self, title, limit=None):
+        """
+        Finds movies whose title contains the given string (case-insensitive).
+
+        Args:
+            title (str): The substring to search for in movie titles.
+            limit (int): The maximum number of movies to return. Defaults to None.
+
+        Returns:
+            list[Movie]: A list of Movie objects whose titles contain the search string.
+        """
         query = select(Movie).where(Movie.title.ilike(f"%{title}%"))
 
         if limit:
@@ -37,6 +79,16 @@ class SQLiteRepository(IRepository):
         return self._exec_query(query).scalars().all()
 
     def has_movie(self, *, id=None, title=None):
+        """
+        Checks if a movie exists based on either its ID or title.
+
+        Args:
+            id (int): The ID of the movie to check for. Defaults to None.
+            title (str): The title of the movie to check for. Defaults to None.
+
+        Returns:
+            bool: True if a movie with the given ID or title exists, False otherwise.
+        """
         if id:
             return self.find_movie_by_id(id) is not None
 
@@ -57,6 +109,26 @@ class SQLiteRepository(IRepository):
             writers,
             actors
     ):
+        """
+        Adds a new movie to the database, including its genres and crew members.
+
+        Args:
+            title (str): The title of the movie.
+            release_year (int): The year the movie was released.
+            rating (float): The rating of the movie.
+            poster_url (str): The URL of the movie's poster.
+            imdb_id (str): The IMDb ID of the movie.
+            genre_names (list[str]): A list of genre names for the movie.
+            directors (list[str]): A list of director names for the movie.
+            writers (list[str]): A list of writer names for the movie.
+            actors (list[str]): A list of actor names for the movie.
+
+        Returns:
+            Movie: The newly added Movie object.
+
+        Raises:
+            SQLAlchemyError: If any database error occurs during the operation.
+        """
         genres = []
         for genre_name in genre_names:
             genre = self.find_genre_by_name(genre_name)
@@ -104,6 +176,18 @@ class SQLiteRepository(IRepository):
             raise e
 
     def add_genre(self, name):
+        """
+        Adds a new genre to the database.
+
+        Args:
+            name (str): The name of the genre to add.
+
+        Returns:
+            Genre: The newly added Genre object.
+
+        Raises:
+            SQLAlchemyError: If any database error occurs during the operation.
+        """
         genre = Genre(name=name)
 
         try:
@@ -115,6 +199,15 @@ class SQLiteRepository(IRepository):
             raise e
 
     def find_genre_by_name(self, name):
+        """
+        Finds a genre by its name.
+
+        Args:
+            name (str): The name of the genre to find.
+
+        Returns:
+            Genre or None: The Genre object with the given name, or None if not found.
+        """
         try:
             query = select(Genre).where(Genre.name == name)
             return self._exec_query(query).scalar_one()
@@ -122,6 +215,18 @@ class SQLiteRepository(IRepository):
             return None
 
     def add_crew_member(self, full_name):
+        """
+        Adds a new crew member to the database.
+
+        Args:
+            full_name (str): The full name of the crew member to add.
+
+        Returns:
+            CrewMember: The newly added CrewMember object.
+
+        Raises:
+            SQLAlchemyError: If any database error occurs during the operation.
+        """
         crew_member = CrewMember(full_name=full_name)
 
         try:
@@ -135,14 +240,37 @@ class SQLiteRepository(IRepository):
             raise e
 
     def find_crew_member_by_name(self, full_name):
+        """
+        Finds a crew member by their full name.
+
+        Args:
+            full_name (str): The full name of the crew member to find.
+
+        Returns:
+            CrewMember or None: The CrewMember object with the given full name, or None if not
+            found.
+        """
         try:
             query = select(CrewMember).where(CrewMember.full_name == full_name)
             return self._exec_query(query).scalar_one()
         except NoResultFound:
             return None
 
-    def add_user(self, username, profile_picture_file_name):
-        user = User(username=username, profile_picture=profile_picture_file_name)
+    def add_user(self, username, profile_picture_filename):
+        """
+        Adds a new user to the database.
+
+        Args:
+            username (str): The username of the new user.
+            profile_picture_filename (str): The filename of the user's profile picture.
+
+        Returns:
+            User: The newly added User object.
+
+        Raises:
+            SQLAlchemyError: If any database error occurs during the operation.
+        """
+        user = User(username=username, profile_picture=profile_picture_filename)
 
         try:
             self._session.add(user)
@@ -153,6 +281,16 @@ class SQLiteRepository(IRepository):
             raise e
 
     def add_user_movie(self, user_id, movie_id):
+        """
+        Associates a user with a movie.
+
+        Args:
+            user_id (int): The ID of the user.
+            movie_id (int): The ID of the movie.
+
+        Raises:
+            SQLAlchemyError: If any database error occurs during the operation.
+        """
         try:
             user_movie = MovieUserAssociation(movie_id=movie_id, user_id=user_id)
             self._session.add(user_movie)
@@ -162,10 +300,25 @@ class SQLiteRepository(IRepository):
             raise e
 
     def find_all_users(self):
+        """
+        Finds all users in the database.
+
+        Returns:
+            list[User]: A list of all User objects in the database.
+        """
         query = select(User)
         return self._exec_query(query).scalars().all()
 
     def find_user_by_id(self, id):
+        """
+        Finds a user by their unique ID.
+
+        Args:
+            id (int): The ID of the user to find.
+
+        Returns:
+            User or None: The User object with the given ID, or None if not found.
+        """
         try:
             query = select(User).where(User.id == id)
             return self._exec_query(query).scalar_one()
@@ -173,9 +326,29 @@ class SQLiteRepository(IRepository):
             return None
 
     def has_user(self, id):
+        """
+        Checks if a user with the given ID exists.
+
+        Args:
+            id (int): The ID of the user to check for.
+
+        Returns:
+            bool: True if a user with the given ID exists, False otherwise.
+        """
         return self.find_user_by_id(id) is not None
 
     def find_user_movie(self, user_id, movie_id):
+        """
+        Finds the association between a user and a movie.
+
+        Args:
+            user_id (int): The ID of the user.
+            movie_id (int): The ID of the movie.
+
+        Returns:
+            MovieUserAssociation or None: The MovieUserAssociation object for the given user and
+            movie, or None if not found.
+        """
         try:
             query = select(MovieUserAssociation).where(
                 MovieUserAssociation.user_id == user_id, MovieUserAssociation.movie_id == movie_id
@@ -185,9 +358,29 @@ class SQLiteRepository(IRepository):
             return None
 
     def has_user_movie(self, user_id, movie_id):
+        """
+        Checks if a user is associated with a movie.
+
+        Args:
+            user_id (int): The ID of the user.
+            movie_id (int): The ID of the movie.
+
+        Returns:
+            bool: True if the user is associated with the movie, False otherwise.
+        """
         return self.find_user_movie(user_id, movie_id) is not None
 
     def delete_user_movie(self, user_id, movie_id):
+        """
+        Deletes the association between a user and a movie.
+
+        Args:
+            user_id (int): The ID of the user.
+            movie_id (int): The ID of the movie.
+
+        Returns:
+            bool: True if the association was successfully deleted, False otherwise.
+        """
         try:
             user_movie = self.find_user_movie(user_id, movie_id)
             self._session.delete(user_movie)
@@ -198,6 +391,17 @@ class SQLiteRepository(IRepository):
             return False
 
     def update_user_movie(self, user_id, movie_id, personal_rating):
+        """
+        Updates the personal rating of a movie for a specific user.
+
+        Args:
+            user_id (int): The ID of the user.
+            movie_id (int): The ID of the movie.
+            personal_rating (int): The personal rating given by the user to the movie.
+
+        Returns:
+            bool: True if the personal rating was successfully updated, False otherwise.
+        """
         try:
             user_movie = self.find_user_movie(user_id, movie_id)
 
@@ -212,9 +416,29 @@ class SQLiteRepository(IRepository):
             return False
 
     def _exec_query(self, query):
+        """
+        Executes a SQLAlchemy query.
+
+        Args:
+            query (sqlalchemy.sql.selectable.Select): The SQLAlchemy select query to execute.
+
+        Returns:
+            sqlalchemy.engine.cursor.CursorResult: The result of the executed query.
+        """
         return self._session.execute(query)
 
     def __create_movie_crew_member_association(self, crew_member_name, movie_id, member_type):
+        """
+        Creates an association between a movie and a crew member.
+
+        Args:
+            crew_member_name (str): The full name of the crew member.
+            movie_id (int): The ID of the movie.
+            member_type (str): The type of crew member (e.g., "director", "writer", "actor").
+
+        Returns:
+            MovieCrewMemberAssociation: The newly created association object.
+        """
         crew_member = self.find_crew_member_by_name(crew_member_name)
 
         if crew_member:

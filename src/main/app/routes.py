@@ -10,6 +10,7 @@ bp = Blueprint("main", __name__)
 
 @bp.route("/")
 def index():
+    """Renders the index page, displaying a list of users."""
     msg = request.args.get("msg")
     msg_lvl = request.args.get("msg_lvl")
     users = repo.find_all_users()
@@ -18,6 +19,7 @@ def index():
 
 @bp.route("/users/<int:user_id>")
 def user_movies(user_id):
+    """Renders the user's movie list page."""
     msg = request.args.get("msg")
     msg_lvl = request.args.get("msg_lvl")
     movie_to_update = request.args.get("movie_to_update")
@@ -42,6 +44,7 @@ def user_movies(user_id):
 
 @bp.route("/users/<int:user_id>", methods=["POST"])
 def add_user_movie(user_id):
+    """Adds a movie to a user's favorites."""
     json = request.json
     movie_id = json.get("id")
     movie_title = json.get("title")
@@ -97,12 +100,13 @@ def add_user_movie(user_id):
 
 @bp.route("/users/new", methods=["GET", "POST"])
 def add_user():
+    """Renders the add user form or handles the submission of a new user."""
     if request.method == "GET":
         return render_template("add_user.html")
 
     username = request.form.get("username")
     profile_picture = request.files.get("profile_picture")
-    profile_picture_file_name = None
+    profile_picture_filename = None
 
     if not username:
         return abort(400)
@@ -124,10 +128,10 @@ def add_user():
                 msg_lvl="error"
             )
 
-        profile_picture_file_name = __store_file(profile_picture)
+        profile_picture_filename = __store_file(profile_picture)
 
     try:
-        repo.add_user(username, profile_picture_file_name)
+        repo.add_user(username, profile_picture_filename)
         return __redirect("main.index", ("User created successfully!", "success"))
     except Exception as e:
         app.logger.error(e)
@@ -136,6 +140,7 @@ def add_user():
 
 @bp.route("/users/<int:user_id>/update-movie/<int:movie_id>", methods=["GET", "POST"])
 def update_user_movie(user_id, movie_id):
+    """Renders the update movie rating form or handles the submission of an updated rating."""
     if not repo.has_user(user_id):
         return abort(404)
 
@@ -166,6 +171,7 @@ def update_user_movie(user_id, movie_id):
 
 @bp.route("/users/<int:user_id>/delete-movie/<int:movie_id>")
 def delete_user_movie(user_id, movie_id):
+    """Deletes a movie from a user's favorites."""
     if not repo.has_user(user_id):
         return abort(404)
 
@@ -180,31 +186,37 @@ def delete_user_movie(user_id, movie_id):
 
 @bp.app_errorhandler(400)
 def bad_request(e):
+    """Handles 400 Bad Request errors."""
     return render_template("400.html"), 400
 
 
 @bp.app_errorhandler(404)
 def not_found(e):
+    """Handles 404 Not Found errors."""
     return render_template("404.html"), 404
 
 
 @bp.app_errorhandler(500)
 def server_error(e):
+    """Handles 500 Internal Server Errors."""
     return render_template("500.html"), 500
 
 
 def __redirect(endpoint, message=(None, None), **kwargs):
+    """Helper function to perform a redirect with an optional message."""
     msg, msg_lvl = message
     return redirect(url_for(endpoint, msg=msg, msg_lvl=msg_lvl, **kwargs))
 
 
 def __get_file_extension(filename):
+    """Helper function to get the file extension from a filename."""
     if not "." in filename:
         raise ValueError()
     return filename.split(".")[-1].lower()
 
 
 def __store_file(file):
+    """Helper function to store an uploaded file."""
     extension = __get_file_extension(file.filename)
     filename = f"{str(uuid4())}.{extension}"
     filepath = os.path.join(app.config.get("UPLOADS_FOLDER"), filename)
@@ -213,6 +225,7 @@ def __store_file(file):
 
 
 def __allowed_file_type(file):
+    """Helper function to check if the uploaded file type is allowed."""
     filename = file.filename
 
     try:
@@ -222,6 +235,7 @@ def __allowed_file_type(file):
 
 
 def __allowed_file_size(file):
+    """Helper function to check if the uploaded file size is within the limit."""
     file.seek(0, os.SEEK_END)
     size = file.tell()
     file.seek(0)
