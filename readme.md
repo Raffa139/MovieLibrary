@@ -1,141 +1,156 @@
 # Movie Library
 
-Multi phase project of a program to manage a library of movies.\
-Starting as a simple cli application and becoming a fully-featured web application.
+This project outlines the development of a Movie Library application through multiple phases.
+It begins as a straightforward command-line interface (CLI) tool and evolves into a fully-featured
+web application for managing a personal movie collection, and supporting multiple user.
 
 ---
 
-## Phase 1
+## Phase 1: Command-Line Interface (CLI) Application
 
-At this stage the project is just a simple CLI application.
+In its initial stage, the project is a simple CLI application providing basic movie library management.
 
-### Functionality
+### Key Functionality
 
-- **CRUD**: Create, Read, Update, and Delete operations
-- **Analytics**: Top-rated movies, least-rated movies etc.
-- **Persistent Storage**: The data is loaded and stored in a JSON file
-
----
-
-## Phase 2
-
-At this stage the projects main user interface is still via the command line.\
-But with the added functionality to generate a simple webpage containing the movies.
-
-### Functionality
-
-- **Including all functionality from Phase 1**
-- **Refactoring the main components with an object oriented approach**
-- **Extended Perstistent Storage**: You can choose between JSON & CSV now
-- **API Fetching**: Information about the movies is fetched from an API
-- **Website Generation**: A website can be generated showing all movies including posters
+-   **CRUD Operations**: Enables users to **C**reate, **R**ead, **U**pdate, and **D**elete movie entries within their library.
+-   **Analytics**: Offers basic analytical features such as identifying the top-rated and least-rated movies in the collection.
+-   **Persistent Storage**: Movie data is stored in a JSON file, allowing the library to persist between application sessions.
 
 ---
 
-## Phase 3
+## Phase 2: Enhanced CLI with Webpage Generation
 
-At this stage the projects transforms from a static movie application into a full-featured, dynamic
-web application.
+This phase expands upon the CLI application by introducing an object-oriented design and the
+capability to generate a simple webpage showcasing the movie library.
+The primary user interface remains the command line.
 
-### Functionality
+### Key Functionality
 
-- **Including core functionality from Phase 1 & 2**
-- **CLI to the Web**: Web-accessible with HTML templating using Flask
-- **ORM Database support**: From JSON to SQLite for data management
-- **Multi User support**
-- **RESTful API for the service**: Coming soon
-- **AI features**: Coming soon
-- **Login via Google**: Coming soon
+-   **Includes all functionality from Phase 1.**
+-   **Refactored Core Components**: The main parts of the application are redesigned using an object-oriented programming (OOP) approach for improved organization and maintainability.
+-   **Extended Persistent Storage**: Users can now choose between storing their movie data in either JSON or CSV (Comma Separated Values) format.
+-   **API Fetching**: The application integrates with an external Application Programming Interface (API) to automatically retrieve information about movies, such as titles, descriptions, and potentially posters.
+-   **Website Generation**: A basic HTML webpage can be generated, displaying the user's movie collection, potentially including movie posters fetched from the API.
 
 ---
 
-## Final App
+## Phase 3: Full-Featured Dynamic Web Application
 
-Going over all features from the final app version of phase 3, including pictures.
+This stage marks the transformation of the project into a complete and interactive web application,
+moving beyond a static webpage.
+
+### Key Functionality
+
+-   **Includes core functionality from Phase 1 & 2.**
+-   **CLI to Web Interface**: The application becomes accessible through a web browser, utilizing HTML templating (with the Flask framework) to render dynamic content.
+-   **ORM Database Support**: The data storage mechanism transitions from simple files (JSON/CSV) to a more robust relational database SQLite, managed through an Object-Relational Mapper (ORM) for easier data interaction.
+-   **Multi-User Support**: The application will allow multiple users to create accounts and manage their own independent movie libraries.
+-   **AI Movie Recommendations**: Integration of AI for movie recommendations.
+-   **RESTful API for the Service**: *(tbd)*
+-   **Login via Google**: *(tbd)*
+
+---
+
+## Final App Features
+
+A detailed overview of the features available in the final web application version of Phase 3,
+including visual examples.
 
 ### Starting Page
 
-- List of users
-- Select one to use the app with (see/add/update/delete favourite movies, get recommendations)
-- Add new user
+-   Displays a list of registered users.
+-   Allows the selection of a user to interact with their movie library (viewing, adding, updating, deleting favourite movies, and receiving recommendations).
+-   Provides an option to add a new user to the application.
 
 ![](docs/start_page.png)
 
-### Adding user
+### Adding User
 
-- Username mandatory
-- Optional upload profile picture
-    - Profile pictures stored in the static/uploads directory (can be configured)
-    - Allowed file types are PNG, JPG/JPEG, and GIF (can be configured)
-    - Allowed file size is 2MB (can be configured)
-    - Profile picture files saved with UUID filename
-    - User entity has field referencing profile picture filename
+-   Requires a mandatory username for each new user.
+-   Offers the option to upload a profile picture for the user.
+    -   Profile pictures are stored in the `static/uploads` directory (this location can be configured).
+    -   The application supports the following file types for profile pictures: PNG, JPG/JPEG, and GIF (the allowed types can be configured).
+    -   The maximum allowed file size for profile pictures is 2MB (this limit can be configured).
+    -   Uploaded profile picture files are saved with a unique UUID (Universally Unique Identifier) as their filename.
+    -   Each user's entity in the database includes a field that references the filename of their associated profile picture.
 
 ![](docs/add_user.png)
 
 ### Favourite Movies
 
-- Lists favourite movies of a user
-- Search and add movies in search bar on top
-- View modes: Compact, Normal, Wide to display more or less movie details
-- Get recommendations
-- Delete and update movies
-- Click on movie poster opens IMDb page
-- Logout to go back to homepage
+-   Lists the movies that a user has marked as their favourites.
+-   Includes a search bar at the top, allowing users to search for and add new movies to their favourites.
+-   Offers different view modes (Compact, Normal, Wide) to control the amount of movie details displayed in the list.
+-   Provides a feature to get movie recommendations based on the user's favourite movies.
+-   Allows users to delete movies from their favourites and update their personal ratings for movies.
+-   Clicking on a movie poster will open the movie's page on IMDb (Internet Movie Database) in a new tab or window.
+-   Includes a "Logout" option to return to the application's homepage.
 
 ![](docs/movie_list.png)
 
 ### Search Movies
 
-- Searches in DB and on OMDb
-    - DB results are listed first, followed by OMDb results
-    - Filters for duplicated results from both DB & OMDb
-- Click on search result adds movie to favourites
-    - If movie not yet in DB, it will be created
-    - If movie already in DB, it wont get created again
+-   Performs searches for movies in two locations: the application's local database and the OMDb (Open Movie Database) API.
+    -   Results found in the local database are displayed first, followed by results retrieved from OMDb.
+    -   The application includes filtering logic to prevent the display of duplicate movie entries that might appear in both the local database and OMDb results.
+-   Clicking on a movie in the search results will add that movie to the current user's favourites.
+    -   If the selected movie is not already present in the application's database, a new movie entry will be created.
+    -   If the movie already exists in the database, it will simply be added to the user's favourites without creating a duplicate database entry.
 
 ![](docs/movie_search.gif)
 
 ### Update Movie
 
-- Opens modal dialog
-- Add or Update personal rating of a movie
+-   Opens a modal dialog (a small, temporary window) that allows the user to modify their personal rating for a selected movie.
+-   Provides fields to add a new rating or update an existing rating.
 
 ![](docs/update_movie.png)
 
 ### Delete Movie
 
-- Delete a movie from the favourites of a user
-- Movie wont be deleted from DB, only the association with the user
+-   Removes a selected movie from the current user's list of favourite movies.
+-   It's important to note that this action only removes the association between the user and the movie; the movie entry itself remains in the application's database and is not deleted entirely.
 
 ### Recommendations
 
-- Opens modal dialog
-- Using Gemini's 2.0 Flash model to get recommendations based on users favourite list
-- Wont recommend movies already in favourites
-- Available if 3+ movies in favourites (can be configured)
+-   Opens a modal dialog displaying movie recommendations for the current user.
+-   Utilizes the Gemini 2.0 Flash model to generate recommendations based on the movies in the user's favourites list.
+-   The recommendation engine is designed to avoid suggesting movies that are already present in the user's favourites.
+-   This feature becomes available only if the user has at least 3 movies in their favourites list (this minimum number can be configured).
 
 ![](docs/recommendations.png)
 
 ### Messages
 
-- Display success and error messages in the top right corner
-- Hide message after progress animation ends (duration can be configured in CSS)
+-   Displays success and error messages to the user in the top right corner of the application interface.
+-   Each message is accompanied by a progress animation, and the message will automatically hide once the animation completes (the duration of the animation can be customized in the application's CSS stylesheets).
 
 ![](docs/success_message.png)
 ![](docs/error_message.png)
 
-## App configuration
+## App Configuration
 
-Custom Flask-App configuration parameters and default values (from app/config.py):
+Customizable Flask application configuration parameters and their default values, as defined in the `app/config.py` file:
 
 ````python
-UPLOADS_FOLDER = "static/uploads"                   # Where profile pictures are stored
-ALLOWED_FILE_TYPES = ("png", "jpg", "jpeg", "gif")  # Allowed file types for profile pictures
-MAX_FILE_SIZE = 2 * 1024 * 1024                     # Max. allowed file size for profile pictures
-START_RECOMMENDATIONS = 3                           # Min. movies in favourites to provide recommendations
+UPLOADS_FOLDER = "static/uploads"                   # Default directory where uploaded profile pictures are stored.
+ALLOWED_FILE_TYPES = ("png", "jpg", "jpeg", "gif")  # Tuple of allowed file extensions for profile picture uploads.
+MAX_FILE_SIZE = 2 * 1024 * 1024                     # Maximum allowed file size for profile picture uploads, specified in bytes (2MB).
+START_RECOMMENDATIONS = 3                           # The minimum number of movies a user must have in their favourites to receive recommendations.
+````
+
+### .env file
+
+The .env file has to provide the following parameters for API keys and the SQLite database file:
+
+````
+OMDb_API_KEY="<Your-API-Key>"
+GEMINI_API_KEY="<Your-API-Key>"
+DATABASE_URI="data/movie_library.sqlite"
 ````
 
 ## Entity-Relationship-Diagram
+
+A visual representation of the entities (tables) in the application's database and the relationships between them.
 
 ![](docs/erd.png)
